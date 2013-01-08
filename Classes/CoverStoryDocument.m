@@ -376,8 +376,7 @@ typedef NS_ENUM(NSInteger, CSMessageType)
                 else
                 {
                     // process what's in the list
-                    if (![self processCoverageForFiles:currentFileList
-                                              inFolder:currentFolder])
+                    if (![self processCoverageForFiles:currentFileList inFolder:currentFolder])
                     {
                         NSString *message = [NSString stringWithFormat:@"failed to process files: %@", currentFileList];
                         [self addMessageFromThread:message path:currentFolder  messageType:kCSMessageTypeError];
@@ -509,8 +508,7 @@ typedef NS_ENUM(NSInteger, CSMessageType)
         // most people will only set the gcc version of a per Xcode target level (at
         // the lowest).
         GCovVersionManager *gcovVerMgr = [GCovVersionManager defaultManager];
-        NSString *aFullPath            =
-        [folderPath stringByAppendingPathComponent:filenames[0]];
+        NSString *aFullPath = [folderPath stringByAppendingPathComponent:filenames[0]];
         NSString *gcovPath = [gcovVerMgr gcovForGCovFile:aFullPath];
         
         // we write all the full file paths into a file w/ null chars after each
@@ -566,10 +564,7 @@ typedef NS_ENUM(NSInteger, CSMessageType)
                 // run gcov (it writes to current directory, so we cd into our dir first)
                 // we use xargs to batch up the files into as few of runs of gcov as
                 // possible.  (we could use -P [num_cpus] to do things in parallell)
-                NSString *script
-                = [NSString stringWithFormat:@"cd \"%@\" && /usr/bin/xargs -0 \"%@\" -l -o \"%@\" < \"%@\"",
-                   tempDir, gcovPath, folderPath, fileListPath];
-                
+                NSString *script = [NSString stringWithFormat:@"cd \"%@\" && /usr/bin/xargs -0 \"%@\" -l -o \"%@\" < \"%@\"", tempDir, gcovPath, folderPath, fileListPath];
                 NSString *stdErr = nil;
                 NSString *stdOut = [runner run:script standardError:&stdErr];
                 if (([stdOut length] == 0) || ([stdErr length] > 0))
