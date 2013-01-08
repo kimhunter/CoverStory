@@ -1338,27 +1338,23 @@ typedef enum {
     coverageString = [coverageString gtm_stringByEscapingForHTML];
     NSString *sourceHTML = [self htmlSourceTableData:fileData];
     NSMutableString *htmlString = [[htmlExportTemplate mutableCopy] autorelease];
-    struct {
-      NSString *a;
-      NSString *b;
-    } replacements[] = {
-     { @"__TITLE__", fileName },
-     { @"__SOURCE_NAME__", fileName },
-     { @"__SOURCE_PATH__", sourcePath },
-     { @"__SOURCE_DATE__", date },
-     { @"__FILE_SUMMARY__", summary },
-     { @"__FILE_DATA__", fileList },
-     { @"__SOURCE_SUMMARY__", coverageString },
-     { @"__SOURCE_DATA__", sourceHTML },
-    };
-    for (size_t i = 0; i < sizeof(replacements) / sizeof(replacements[0]); ++i) {
-      if (![self mutateString:htmlString
-                  byReplacing:replacements[i].a
-                         with:replacements[i].b
-                        error:outError]) {
-        return NO;
+      NSDictionary *htmlReplacements = @{ @"__TITLE__" :  fileName,
+      @"__SOURCE_NAME__" :  fileName,
+      @"__SOURCE_PATH__" :  sourcePath,
+      @"__SOURCE_DATE__" :  date,
+      @"__FILE_SUMMARY__" :  summary,
+      @"__FILE_DATA__" :  fileList,
+      @"__SOURCE_SUMMARY__" :  coverageString,
+      @"__SOURCE_DATA__" :  sourceHTML,
+      };
+
+      for (NSString *token in htmlReplacements)
+      {
+          if (![self mutateString:htmlString byReplacing:token with:[htmlReplacements objectForKey:token] error:outError])
+          {
+              return NO;
+          }
       }
-    }
     
     NSData *data = [htmlString dataUsingEncoding:NSUTF8StringEncoding];
     [finalWrapper addRegularFileWithContents:data
@@ -1428,7 +1424,7 @@ typedef enum {
 		  int greenInt = (int)(components[1] * 255);
 		  int blueInt  = (int)(components[2] * 255);
 		  NSString *newColor = [NSString stringWithFormat:@"#%02X%02X%02X", redInt, greenInt, blueInt];
-		  NSString *replacee = sourceLineColorMap[colorKey];
+		  NSString *replacee = [sourceLineColorMap objectForKey:colorKey];
 		  cssString = [cssString stringByReplacingOccurrencesOfString:replacee withString:newColor];
 	  }
 	  NSData *cssData = [cssString dataUsingEncoding:NSUTF8StringEncoding];
