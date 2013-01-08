@@ -34,7 +34,7 @@
   
   // Set our document controller up as the shared document controller
   // so we don't get NSDocumentController instead.
-  [[[CoverStoryDocumentController alloc] init] autorelease];
+  [[CoverStoryDocumentController alloc] init];
 }
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)theApplication {

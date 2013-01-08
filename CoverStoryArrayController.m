@@ -53,7 +53,6 @@ static NSString *const kDocumentKeyPathsToWatch[] = {
                   forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]];
   }
 
-  [super dealloc];
 }
 
 
