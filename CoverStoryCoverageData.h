@@ -72,11 +72,11 @@ enum {
   __weak CoverStoryDocument *document_;
 }
 
-@property (readonly, nonatomic, assign) CoverStoryDocument *document;
+@property (nonatomic, weak) CoverStoryDocument *document;
 @property (readonly, nonatomic, copy) NSString *sourcePath;
-@property (readonly, nonatomic, retain) NSArray *lines;
+@property (readonly, nonatomic, strong) NSArray *lines;
 // this is only vended for the table to sort with
-@property (readonly, nonatomic, retain) NSNumber *coverage;
+@property (readonly, nonatomic, strong) NSNumber *coverage;
 
 + (id)coverageFileDataFromPath:(NSString *)path
                       document:(CoverStoryDocument *)document
@@ -112,7 +112,7 @@ enum {
 
 @property (readonly, nonatomic, assign) NSInteger hitCount;
 @property (readonly, nonatomic, copy) NSString *line;
-@property (readonly, nonatomic, assign) CoverStoryCoverageFileData *coverageFile;
+@property (weak) CoverStoryCoverageFileData *coverageFile;
 
 + (id)coverageLineDataWithLine:(NSString*)line 
                       hitCount:(NSInteger)hitCount 

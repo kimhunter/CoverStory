@@ -53,7 +53,7 @@
 		8BAAA3E60F7D614F00DF4F12 /* SDKHide.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BAAA3E40F7D614F00DF4F12 /* SDKHide.png */; };
 		8BAAA3E70F7D614F00DF4F12 /* UnitTestsHide.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BAAA3E50F7D614F00DF4F12 /* UnitTestsHide.png */; };
 		8BB788F811B8467800AB31AF /* CoverStoryArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB788F711B8467800AB31AF /* CoverStoryArrayController.m */; };
-		8BB7893111B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7893011B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m */; };
+		8BB7893111B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7893011B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8BC04E2C0DB0459100C2D1CA /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC04E290DB0459100C2D1CA /* info.png */; };
 		8BC04E2D0DB0459100C2D1CA /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC04E2A0DB0459100C2D1CA /* error.png */; };
 		8BC04E2E0DB0459100C2D1CA /* warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC04E2B0DB0459100C2D1CA /* warning.png */; };
@@ -64,7 +64,7 @@
 		8BCDD8730E0AA18A006EBB62 /* UnitTests.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCDD8710E0AA18A006EBB62 /* UnitTests.png */; };
 		8BD8C47C0F8D534D00320FAB /* coverstory.css in Resources */ = {isa = PBXBuildFile; fileRef = 8BD8C47B0F8D534D00320FAB /* coverstory.css */; };
 		8BE1A2090DD0E237008455E6 /* openscript.applescript in AppleScript */ = {isa = PBXBuildFile; fileRef = 8BBEC3630DD0E02400E5D45D /* openscript.applescript */; settings = {ATTRIBUTES = (Debug, ); }; };
-		8BFD54F60B3F009300AFCDA2 /* CoverStoryCoverageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFD54F50B3F009300AFCDA2 /* CoverStoryCoverageData.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8BFD54F60B3F009300AFCDA2 /* CoverStoryCoverageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFD54F50B3F009300AFCDA2 /* CoverStoryCoverageData.m */; settings = {COMPILER_FLAGS = ""; }; };
 		8BFD5B040B3F126D00AFCDA2 /* CoverStoryScroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFD5B030B3F126D00AFCDA2 /* CoverStoryScroller.m */; };
 		8BFD61400B3F9DE500AFCDA2 /* CoverStoryApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFD613F0B3F9DE500AFCDA2 /* CoverStoryApplicationDelegate.m */; };
 		8BFD651E0B405B6400AFCDA2 /* CoverStory.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8BFD651D0B405B6400AFCDA2 /* CoverStory.icns */; };
