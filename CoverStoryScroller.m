@@ -76,7 +76,7 @@
         [NSBezierPath setDefaultLineWidth:NSHeight(slot) / count];
         for (NSUInteger i = 0; i < count; ++i)
         {
-            CoverStoryCoverageLineData *data = [coverageData_ objectAtIndex:i];
+            CoverStoryCoverageLineData *data = coverageData_[i];
             NSInteger hitCount               = [data hitCount];
             if (hitCount == 0)
             {

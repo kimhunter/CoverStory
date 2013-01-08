@@ -48,10 +48,8 @@
       color = [NSColor colorWithDeviceWhite:0.4 alpha:1.0];
     }
     
-    attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                    pStyle, NSParagraphStyleAttributeName,
-                    color, NSForegroundColorAttributeName, 
-                    nil];
+    attributes = @{NSParagraphStyleAttributeName: pStyle,
+                    NSForegroundColorAttributeName: color};
     
     if (count == kCoverStoryNonFeasibleMarker) {
       displayString = @"--"; // for non-feasible lines
@@ -70,18 +68,13 @@
 @implementation CoverageLineDataToSourceLineTransformer
 
 + (void)registerDefaults {
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  NSDictionary *lineTransformerDefaults =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-     [NSArchiver archivedDataWithRootObject:[NSColor redColor]], 
-     kCoverStoryMissedLineColorKey,
-     [NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
-     kCoverStoryUnexecutableLineColorKey,
-     [NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
-     kCoverStoryNonFeasibleLineColorKey,
-     [NSArchiver archivedDataWithRootObject:[NSColor blackColor]],
-     kCoverStoryExecutedLineColorKey,
-     nil];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *lineTransformerDefaults = @{
+        kCoverStoryMissedLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor redColor]],
+        kCoverStoryUnexecutableLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
+        kCoverStoryNonFeasibleLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
+        kCoverStoryExecutedLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]
+    };
   
   [defaults registerDefaults:lineTransformerDefaults];
 }
@@ -126,11 +119,9 @@
     colorName = kCoverStoryExecutedLineColorKey;
   }
   NSColor *textColor = [self defaultColorNamed:colorName];
-  NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                              textColor, NSForegroundColorAttributeName, 
-                              nil];
+  NSDictionary *attributes = @{NSForegroundColorAttributeName: textColor};
   return [[NSAttributedString alloc] initWithString:line
-                                          attributes:attributes];
+                                         attributes:attributes];
 }
 
 @end
@@ -215,9 +206,7 @@ const float kGoodCoverage = 75.0f;
                                             saturation:saturation
                                             brightness:brightness
                                                  alpha:1.0];
-  NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                              textColor, NSForegroundColorAttributeName, 
-                              nil];
+  NSDictionary *attributes = @{NSForegroundColorAttributeName: textColor};
   return [[NSAttributedString alloc] initWithString:coverageString
                                           attributes:attributes];
 }

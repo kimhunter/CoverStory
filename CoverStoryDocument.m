@@ -135,7 +135,7 @@ typedef enum {
                               context:nil];
   NSSortDescriptor *ascending = [[NSSortDescriptor alloc] initWithKey:@"coverage"
                                                              ascending:YES];
-  [sourceFilesController_ setSortDescriptors:[NSArray arrayWithObject:ascending]];
+  [sourceFilesController_ setSortDescriptors:@[ascending]];
 }
 
 - (NSString *)windowNibName
@@ -220,7 +220,7 @@ typedef enum {
 {
     BOOL didOpen                         = NO;
     NSArray *fileSelection               = [sourceFilesController_ selectedObjects];
-    CoverStoryCoverageFileData *fileData = [fileSelection objectAtIndex:0];
+    CoverStoryCoverageFileData *fileData = fileSelection[0];
     NSString *path                       = [fileData sourcePath];
     NSIndexSet *selectedRows             = [codeTableView_ selectedRowIndexes];
 
@@ -286,7 +286,7 @@ typedef enum {
     NSString *folderPath = [path stringByDeletingLastPathComponent];
     NSString *filename = [path lastPathComponent];
     @try {
-      [self processCoverageForFiles:[NSArray arrayWithObject:filename]
+      [self processCoverageForFiles:@[filename]
                            inFolder:folderPath];
     }
     @catch (NSException *e) {
@@ -492,7 +492,7 @@ typedef enum {
   // the lowest).
   GCovVersionManager *gcovVerMgr = [GCovVersionManager defaultManager];
   NSString *aFullPath =
-    [folderPath stringByAppendingPathComponent:[filenames objectAtIndex:0]];
+    [folderPath stringByAppendingPathComponent:filenames[0]];
   NSString *gcovPath = [gcovVerMgr gcovForGCovFile:aFullPath];
 
   // we write all the full file paths into a file w/ null chars after each
@@ -611,7 +611,7 @@ typedef enum {
     NSArray *selectedObjects = [object selectedObjects];
     CoverStoryCoverageFileData *data = nil;
     if ([selectedObjects count]) {
-      data = (CoverStoryCoverageFileData*)[selectedObjects objectAtIndex:0];
+      data = (CoverStoryCoverageFileData*)selectedObjects[0];
     }
     if (data) {
       // Update our scroll bar
@@ -727,7 +727,7 @@ typedef enum {
   if (![selection count]) return;
 
   // Start with the current selection
-  CoverStoryCoverageFileData *fileData = [selection objectAtIndex:0];
+  CoverStoryCoverageFileData *fileData = selection[0];
   NSArray *lines = [fileData lines];
   NSIndexSet *currentSel = [codeTableView_ selectedRowIndexes];
 
@@ -754,7 +754,7 @@ typedef enum {
   // zero hits
   NSUInteger i;
   for (i = startLine + offset; i != stoppingCond; i += offset) {
-    CoverStoryCoverageLineData *lineData = [lines objectAtIndex:i];
+    CoverStoryCoverageLineData *lineData = lines[i];
     if ([lineData hitCount] == 0) {
       break;
     }
@@ -766,7 +766,7 @@ typedef enum {
     // Now select "forward" everything that is zero
     NSUInteger j;
     for (j = i; j != stoppingCond; j += offset) {
-      CoverStoryCoverageLineData *lineData = [lines objectAtIndex:j];
+      CoverStoryCoverageLineData *lineData = lines[j];
       if ([lineData hitCount] != 0) {
         break;
       }
@@ -777,7 +777,7 @@ typedef enum {
     stoppingCond = offset == 1 ? 0 : [lines count] - 1;
     offset *= -1;
     for (k = i; k != stoppingCond; k+= offset) {
-      CoverStoryCoverageLineData *lineData = [lines objectAtIndex:k];
+      CoverStoryCoverageLineData *lineData = lines[k];
       if ([lineData hitCount] != 0) {
         k -= offset;
         break;
@@ -872,26 +872,18 @@ typedef enum {
       effect = NSViewAnimationFadeOutEffect;
     }
     NSValue *endFrameRectValue = [NSValue valueWithRect:rect];
-    NSDictionary *searchAnimation = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     searchField_, NSViewAnimationTargetKey,
-                                     endFrameRectValue, NSViewAnimationEndFrameKey,
-                                     nil];
-    NSDictionary *spinnerAnimation = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      spinner_, NSViewAnimationTargetKey,
-                                      effect, NSViewAnimationEffectKey,
-                                      nil];
+    NSDictionary *searchAnimation = @{NSViewAnimationTargetKey: searchField_,
+                                     NSViewAnimationEndFrameKey: endFrameRectValue};
+    NSDictionary *spinnerAnimation = @{NSViewAnimationTargetKey: spinner_,
+                                      NSViewAnimationEffectKey: effect};
 
     NSArray *animations;
     if (starting) {
-      animations = [NSArray arrayWithObjects:
-                    searchAnimation,
-                    spinnerAnimation,
-                    nil];
+      animations = @[searchAnimation,
+                    spinnerAnimation];
     } else {
-      animations = [NSArray arrayWithObjects:
-                    spinnerAnimation,
-                    searchAnimation,
-                    nil];
+      animations = @[spinnerAnimation,
+                    searchAnimation];
     }
     currentAnimation_ =
       [[NSViewAnimation alloc] initWithViewAnimations:animations];
@@ -976,7 +968,7 @@ typedef enum {
 - (void)setOpenThreadState:(BOOL)threadRunning {
   openingInThread_ = threadRunning;
   [self performSelectorOnMainThread:@selector(displayAndAnimateSpinner:)
-                         withObject:[NSNumber numberWithBool:openingInThread_]
+                         withObject:@(openingInThread_)
                       waitUntilDone:NO];
 }
 
@@ -987,10 +979,8 @@ typedef enum {
 - (void)addMessageFromThread:(NSString *)message
                  messageType:(CSMessageType)msgType {
   NSDictionary *messageInfo =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-     message, @"message",
-     [NSNumber numberWithInt:msgType], @"msgType",
-     nil];
+    @{@"message": message,
+     @"msgType": [NSNumber numberWithInt:msgType]};
   [self performSelectorOnMainThread:@selector(addMessage:)
                          withObject:messageInfo
                       waitUntilDone:NO];
@@ -1122,8 +1112,8 @@ typedef enum {
 - (void)addMessage:(NSDictionary *)msgInfo {
   if ([self isClosed]) return;
 
-  NSString *message = [msgInfo objectForKey:@"message"];
-  CSMessageType msgType = [[msgInfo objectForKey:@"msgType"] intValue];
+  NSString *message = msgInfo[@"message"];
+  CSMessageType msgType = [msgInfo[@"msgType"] intValue];
   if (message) {
     // for non-info make sure the drawer is open
     if (msgType != kCSMessageTypeInfo) {
@@ -1162,10 +1152,8 @@ typedef enum {
     NSMutableParagraphStyle *paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [paraStyle setFirstLineHeadIndent:0];
     [paraStyle setHeadIndent:12];
-    NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
-                           textColor, NSForegroundColorAttributeName,
-                           paraStyle, NSParagraphStyleAttributeName,
-                           nil];
+    NSDictionary *attrs = @{NSForegroundColorAttributeName: textColor,
+                           NSParagraphStyleAttributeName: paraStyle};
 
     [attrIconAndMessage addAttributes:attrs range:NSMakeRange(0, [attrMessage length])];
     NSTextStorage *storage = [messageView_ textStorage];
@@ -1263,8 +1251,7 @@ typedef enum {
       NSString *errString
         = [NSString stringWithFormat:@"Unable to find %@", value];
       NSDictionary *dict
-        = [NSDictionary dictionaryWithObject:errString
-                                      forKey:NSLocalizedDescriptionKey];
+        = @{NSLocalizedDescriptionKey: errString};
 
       *error = [NSError errorWithDomain:kCoverStoryErrorDomain
                                    code:kCoverStoryExportError
@@ -1322,7 +1309,7 @@ typedef enum {
 
         for (NSString *token in htmlReplacements)
         {
-            if (![self mutateString:htmlString byReplacing:token with:[htmlReplacements objectForKey:token] error:outError])
+            if (![self mutateString:htmlString byReplacing:token with:htmlReplacements[token] error:outError])
             {
                 return NO;
             }
@@ -1395,7 +1382,7 @@ typedef enum {
 		  int greenInt = (int)(components[1] * 255);
 		  int blueInt  = (int)(components[2] * 255);
 		  NSString *newColor = [NSString stringWithFormat:@"#%02X%02X%02X", redInt, greenInt, blueInt];
-		  NSString *replacee = [sourceLineColorMap objectForKey:colorKey];
+		  NSString *replacee = sourceLineColorMap[colorKey];
 		  cssString = [cssString stringByReplacingOccurrencesOfString:replacee withString:newColor];
 	  }
 	  NSData *cssData = [cssString dataUsingEncoding:NSUTF8StringEncoding];
@@ -1410,7 +1397,7 @@ typedef enum {
 }
 
 - (id)handleExportHTMLScriptCommand:(NSScriptCommand *)command {
-  NSURL *url = [[command arguments] objectForKey:@"File"];
+  NSURL *url = [command arguments][@"File"];
   NSError *error = nil;
   if (![self writeToURL:url ofType:@"Folder" error:&error]) {
     [command setScriptErrorNumber:(int)[error code]];

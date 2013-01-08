@@ -341,7 +341,7 @@ static float codeCoverage(NSInteger codeLines, NSInteger hitCodeLines,
           nonFeasibleLines:NULL
             coverageString:NULL
                   coverage:&result];
-  return [NSNumber numberWithFloat:result];
+  return @(result);
 }
 
 - (void)coverageTotalLines:(NSInteger *)outTotal

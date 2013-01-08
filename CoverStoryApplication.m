@@ -27,7 +27,7 @@
 - (id)handleOpenScriptCommand:(NSScriptCommand *)command {
   NSArray *files = [command directParameter];
   if ([files isMemberOfClass:[NSURL class]]) {
-    files = [NSArray arrayWithObject:files];
+    files = @[files];
   }
   NSDocumentController *docController 
     = [NSDocumentController sharedDocumentController];
@@ -65,7 +65,7 @@
   }
   
   if ([documents count] == 1) {
-    documents = [documents objectAtIndex:0];
+    documents = documents[0];
   }
   return documents;
 }

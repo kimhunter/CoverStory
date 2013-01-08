@@ -141,7 +141,7 @@ static NSString * const kFilter = @"filter";
     const char *utf8Self = [self UTF8String];
     for (NSDictionary *patternDict in patterns)
     {
-        NSString *pattern = [patternDict objectForKey:kFilter];
+        NSString *pattern = patternDict[kFilter];
         if (([pattern length] > 0) &&
             (fnmatch([pattern UTF8String], utf8Self, 0) == 0))
         {
