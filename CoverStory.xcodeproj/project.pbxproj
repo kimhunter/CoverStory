@@ -345,7 +345,7 @@
 				8BB7892F11B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.h */,
 				8BB7893011B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m */,
 			);
-			name = Classes;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
@@ -481,7 +481,7 @@
 				F487520711B6CA8800774A63 /* GCovVersionManagerTest.m */,
 				F426B7F50E0AB73C00348386 /* TestData */,
 			);
-			name = UnitTesting;
+			path = UnitTesting;
 			sourceTree = "<group>";
 		};
 		F426B7F50E0AB73C00348386 /* TestData */ = {
@@ -834,7 +834,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_PREFIX_HEADER = CoverStoryDocumentTypes.h;
+				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/Classes/CoverStoryDocumentTypes.h";
 				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LEXFLAGS = "$(inherited) --noyy_top_state";
@@ -857,7 +857,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_PREFIX_HEADER = CoverStoryDocumentTypes.h;
+				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/Classes/CoverStoryDocumentTypes.h";
 				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LEXFLAGS = "$(inherited) --noyy_top_state";
