@@ -73,8 +73,6 @@
 	<string>CoverStory Help</string>
 	<key>CFBundleHelpBookName</key>
 	<string>CoverStory Help</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.5.0</string>
 	<key>CFBundleIconFile</key>
 	<string>CoverStory</string>
 	<key>CFBundleIdentifier</key>
@@ -89,17 +87,19 @@
 	<string>Coß†</string>
 	<key>CFBundleVersion</key>
 	<string>${COVERSTORY_VERSION}</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.7.0</string>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>CoverStoryApplication</string>
-	<key>NSAppleScriptEnabled</key>
-	<true/>
 	<key>OSAScriptingDefinition</key>
 	<string>CoverStory.sdef</string>
-	<key>SUPublicDSAKeyFile</key>
-	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
 	<string>${COVERSTORY_SUFEEDURL}</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
 </dict>
 </plist>
