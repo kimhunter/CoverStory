@@ -1403,43 +1403,36 @@ typedef enum {
     NSUserDefaultsController *defaults
       = [NSUserDefaultsController sharedUserDefaultsController];
     id values = [defaults values];
-    struct {
-      NSString *defaultName;
-      NSString *replacee;
-    } sourceLineColorMap[] = {
-      { kCoverStoryMissedLineColorKey, @"$$SOURCE_LINE_MISSED_COLOR$$" },
-      { kCoverStoryUnexecutableLineColorKey, @"$$SOURCE_LINE_SKIPPED_COLOR$$" },
-      { kCoverStoryNonFeasibleLineColorKey, @"$$SOURCE_LINE_NONFEASIBLE_COLOR$$" },
-      { kCoverStoryExecutedLineColorKey, @"$$SOURCE_LINE_HIT_COLOR$$" }
-    };
-
-    for (size_t i = 0;
-         i < sizeof(sourceLineColorMap) / sizeof(sourceLineColorMap[0]);
-         ++i) {
-      NSData *colorData
-        = [values valueForKey:sourceLineColorMap[i].defaultName];
-      NSColor *color = nil;
-      if (colorData) {
-        color = (NSColor *)[NSUnarchiver unarchiveObjectWithData:colorData];
-      }
-      if (!color) {
-        color = [NSColor blackColor];
-      }
-      color = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
-      CGFloat components[4];
-      [color getComponents:components];
-      int redInt = (int)(components[0] * 255);
-      int greenInt = (int)(components[1] * 255);
-      int blueInt = (int)(components[2] * 255);
-      NSString *newColor
-        = [NSString stringWithFormat:@"#%02X%02X%02X", redInt, greenInt, blueInt];
-      NSString *replacee = sourceLineColorMap[i].replacee;
-      cssString = [cssString stringByReplacingOccurrencesOfString:replacee
-                                                       withString:newColor];
-    }
-    NSData *cssData = [cssString dataUsingEncoding:NSUTF8StringEncoding];
-    [finalWrapper addRegularFileWithContents:cssData
-                           preferredFilename:@"coverstory.css"];
+    NSDictionary *sourceLineColorMap = @{
+										kCoverStoryMissedLineColorKey : @"$$SOURCE_LINE_MISSED_COLOR$$",
+										kCoverStoryUnexecutableLineColorKey: @"$$SOURCE_LINE_SKIPPED_COLOR$$" ,
+										kCoverStoryNonFeasibleLineColorKey: @"$$SOURCE_LINE_NONFEASIBLE_COLOR$$",
+										kCoverStoryExecutedLineColorKey: @"$$SOURCE_LINE_HIT_COLOR$$"
+										};
+	  for (NSString *colorKey in [sourceLineColorMap allKeys])
+	  {
+		  NSData *colorData = [values valueForKey:colorKey];
+		  NSColor *color = nil;
+		  if (colorData)
+		  {
+			  color = (NSColor *)[NSUnarchiver unarchiveObjectWithData:colorData];
+		  }
+		  if (!color)
+		  {
+			  color = [NSColor blackColor];
+		  }
+		  color = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
+		  CGFloat components[4];
+		  [color getComponents:components];
+		  int redInt   = (int)(components[0] * 255);
+		  int greenInt = (int)(components[1] * 255);
+		  int blueInt  = (int)(components[2] * 255);
+		  NSString *newColor = [NSString stringWithFormat:@"#%02X%02X%02X", redInt, greenInt, blueInt];
+		  NSString *replacee = sourceLineColorMap[colorKey];
+		  cssString = [cssString stringByReplacingOccurrencesOfString:replacee withString:newColor];
+	  }
+	  NSData *cssData = [cssString dataUsingEncoding:NSUTF8StringEncoding];
+	  [finalWrapper addRegularFileWithContents:cssData preferredFilename:@"coverstory.css"];
   }
   NSString *jsPath = [[NSBundle mainBundle] pathForResource:@"coverstory"
                                                      ofType:@"js"];
