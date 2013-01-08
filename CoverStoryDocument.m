@@ -51,11 +51,12 @@ const NSInteger kCoverStoryExportError = 1;
 + (NSFileManager *)threadSafeManager;
 @end
 
-typedef enum {
+typedef NS_ENUM(NSInteger, CSMessageType)
+{
     kCSMessageTypeError,
     kCSMessageTypeWarning,
     kCSMessageTypeInfo
-} CSMessageType;
+};
 
 @interface CoverStoryDocument ()
 - (void)openFolderInThread:(NSString *)path;
