@@ -17,59 +17,63 @@
 #pragma mark CoverStoryCoverageLineData
 
 - (void)test1LineDataBasics {
-  struct TestDataRecord {
-    NSString *line;
-    NSInteger hitCount;
-  } testData[] = {
-    { nil, 0 },
-    { nil, 1 },
-    { @"line", 0 },
-    { @"line2", 10 },
-    { @"line3", kCoverStoryNotExecutedMarker },
-    { @"line4", kCoverStoryNonFeasibleMarker },
-  };
-  for (size_t x = 0; x < sizeof(testData)/sizeof(struct TestDataRecord); ++x) {
-    CoverStoryCoverageLineData *data =
-      [CoverStoryCoverageLineData coverageLineDataWithLine:testData[x].line
-                                                  hitCount:testData[x].hitCount
-                                              coverageFile:nil];
-    STAssertNotNil(data, nil);
-    STAssertEqualObjects([data line], testData[x].line, @"index %u", x);
-    STAssertEquals([data hitCount], testData[x].hitCount, @"index %u", x);
-    
-    STAssertGreaterThan([[data description] length], (NSUInteger)5, @"index %u", x);
-    
-  }
+    struct TestDataRecord {
+        char line[10];
+        NSInteger hitCount;
+    } testData[] = {
+        { "", 0 },
+        { "", 1 },
+        { "line", 0 },
+        { "line2", 10 },
+        { "line3", kCoverStoryNotExecutedMarker },
+        { "line4", kCoverStoryNonFeasibleMarker },
+    };
+    for (size_t x = 0; x < sizeof(testData)/sizeof(struct TestDataRecord); ++x) {
+        
+        NSString *line =  strlen(testData[x].line) ? @(testData[x].line) : nil;
+
+        CoverStoryCoverageLineData *data = [CoverStoryCoverageLineData newCoverageLineDataWithLine:line
+                                                                                          hitCount:testData[x].hitCount
+                                                                                      coverageFile:nil];
+        STAssertNotNil(data, nil);
+        STAssertEqualObjects([data line], line, @"index %u", x);
+        STAssertEquals([data hitCount], testData[x].hitCount, @"index %u", x);
+        
+        STAssertGreaterThan([[data description] length], (NSUInteger)5, @"index %u", x);
+        
+    }
 }
 
-- (void)test2LineDataAddHits {
-  struct TestDataRecord {
-    NSInteger hitCount1;
-    NSInteger hitCount2;
-    NSInteger hitCountSum;
-  } testData[] = {
-    { 0, 0, 0 },
-    { 0, 1, 1 },
-    { 1, 0, 1 },
-    { 1, 1, 2 },
+- (void)test2LineDataAddHits
+{
+    struct TestDataRecord {
+        NSInteger hitCount1;
+        NSInteger hitCount2;
+        NSInteger hitCountSum;
+    } testData[] = {
+        { 0, 0, 0 },
+        { 0, 1, 1 },
+        { 1, 0, 1 },
+        { 1, 1, 2 },
 
-    { 0, kCoverStoryNotExecutedMarker, 0 },
-    { kCoverStoryNotExecutedMarker, 0, 0 },
-    { kCoverStoryNotExecutedMarker, kCoverStoryNotExecutedMarker, kCoverStoryNotExecutedMarker },
-    { 1, kCoverStoryNotExecutedMarker, 1 },
-    { kCoverStoryNotExecutedMarker, 1, 1 },
+        { 0, kCoverStoryNotExecutedMarker, 0 },
+        { kCoverStoryNotExecutedMarker, 0, 0 },
+        { kCoverStoryNotExecutedMarker, kCoverStoryNotExecutedMarker, kCoverStoryNotExecutedMarker },
+        { 1, kCoverStoryNotExecutedMarker, 1 },
+        { kCoverStoryNotExecutedMarker, 1, 1 },
 
-    { kCoverStoryNonFeasibleMarker, kCoverStoryNonFeasibleMarker, kCoverStoryNonFeasibleMarker },
-  };
-  for (size_t x = 0; x < sizeof(testData)/sizeof(struct TestDataRecord); ++x) {
-    CoverStoryCoverageLineData *data =
-      [CoverStoryCoverageLineData coverageLineDataWithLine:@"line"
-                                                  hitCount:testData[x].hitCount1
-                                              coverageFile:nil];
-    STAssertNotNil(data, nil);
-    [data addHits:testData[x].hitCount2];
-    STAssertEquals([data hitCount], testData[x].hitCountSum, @"index %u", x);
-  }
+        { kCoverStoryNonFeasibleMarker, kCoverStoryNonFeasibleMarker, kCoverStoryNonFeasibleMarker },
+    };
+    for (size_t x = 0; x < sizeof(testData) / sizeof(struct TestDataRecord); ++x)
+    {
+        CoverStoryCoverageLineData *data =
+            [CoverStoryCoverageLineData newCoverageLineDataWithLine:@"line"
+             hitCount:testData[x].hitCount1
+             coverageFile:nil];
+        STAssertNotNil(data, nil);
+        [data addHits:testData[x].hitCount2];
+        STAssertEquals([data hitCount], testData[x].hitCountSum, @"index %u", x);
+    }
 }
 
 #pragma mark CoverStoryCoverageFileData
@@ -79,34 +83,34 @@
   STAssertNotNil(testBundle, nil);
   
   struct TestDataRecord {
-    NSString *name;
-    NSString *sourcePath;
+    char name[100];
+    char sourcePath[100];
     NSInteger numberTotalLines;
     NSInteger numberCodeLines;
     NSInteger numberHitCodeLines;
     NSInteger numberNonFeasibleLines;
     float coverage;
   } testData[] = {
-    { @"Foo1a", @"Foo.m", 11, 8, 6, 0, 75.0f },
-    { @"Foo1b", @"Foo.m", 11, 8, 6, 0, 75.0f },
-    { @"Foo2", @"Bar.m", 15, 4, 2, 5, 50.0f },
-    { @"Foo3", @"mcctest.c", 64, 18, 0, 0, 0.0f },
-    { @"NoEndingNewline", @"Baz.m", 11, 8, 6, 0, 75.0f },
+    { "Foo1a", "Foo.m", 11, 8, 6, 0, 75.0f },
+    { "Foo1b", "Foo.m", 11, 8, 6, 0, 75.0f },
+    { "Foo2", "Bar.m", 15, 4, 2, 5, 50.0f },
+    { "Foo3", "mcctest.c", 64, 18, 0, 0, 0.0f },
+    { "NoEndingNewline", "Baz.m", 11, 8, 6, 0, 75.0f },
   };
   for (size_t x = 0; x < sizeof(testData)/sizeof(struct TestDataRecord); ++x) {
-    NSString *path = [testBundle pathForResource:testData[x].name
+    NSString *path = [testBundle pathForResource:@(testData[x].name)
                                           ofType:@"gcov"];
     STAssertNotNil(path, @"index %u", x);
     CoverStoryCoverageFileData *data =
-      [CoverStoryCoverageFileData coverageFileDataFromPath:path
-                                                  document:nil
-                                           messageReceiver:nil];
+      [CoverStoryCoverageFileData newCoverageFileDataFromPath:path
+                                                     document:nil
+                                              messageReceiver:nil];
     STAssertNotNil(data, @"index %u", x);
     STAssertEquals([[data lines] count],
                    (NSUInteger)testData[x].numberTotalLines,
                    @"index %u", x);
     STAssertEqualObjects([data sourcePath],
-                   testData[x].sourcePath,
+                   @(testData[x].sourcePath),
                    @"index %u", x);
     NSInteger totalLines = 0;
     NSInteger codeLines = 0;
@@ -136,23 +140,23 @@
   STAssertNotNil(testBundle, nil);
   
   struct TestDataRecord {
-    NSString *name;
-    NSString *sourcePath;
+    char name[100];
+    char sourcePath[100];
     NSInteger numberTotalLines;
     NSInteger numberCodeLines;
     NSInteger numberHitCodeLines;
     NSInteger numberNonFeasibleLines;
     float coverage;
   } testData[] = {
-    { @"testCR", @"Foo.m", 11, 8, 6, 0, 75.0f },
-    { @"testLF", @"Foo.m", 11, 8, 6, 0, 75.0f },
-    { @"testCRLF", @"Foo.m", 11, 8, 6, 0, 75.0f },
+    { "testCR", "Foo.m", 11, 8, 6, 0, 75.0f },
+    { "testLF", "Foo.m", 11, 8, 6, 0, 75.0f },
+    { "testCRLF", "Foo.m", 11, 8, 6, 0, 75.0f },
   };
   NSMutableSet *fileContentsSet = [NSMutableSet set];
   STAssertNotNil(fileContentsSet, nil);
   CoverStoryCoverageFileData *prevData = nil;
   for (size_t x = 0; x < sizeof(testData)/sizeof(struct TestDataRecord); ++x) {
-    NSString *path = [testBundle pathForResource:testData[x].name
+    NSString *path = [testBundle pathForResource:@(testData[x].name)
                                           ofType:@"gcov"];
     // load the file blob and store in a set to ensure they each have different
     // byte sequences (due to the end of line markers they are using)
@@ -164,15 +168,15 @@
                    @"failed to get a uniq file contents at index %u", x);
     // now process the file
     CoverStoryCoverageFileData *data =
-      [CoverStoryCoverageFileData coverageFileDataFromPath:path
-                                                  document:nil
-                                           messageReceiver:nil];
+      [CoverStoryCoverageFileData newCoverageFileDataFromPath:path
+                                                     document:nil
+                                              messageReceiver:nil];
     STAssertNotNil(data, @"index %u", x);
     STAssertEquals([[data lines] count],
                    (NSUInteger)testData[x].numberTotalLines,
                    @"index %u", x);
     STAssertEqualObjects([data sourcePath],
-                         testData[x].sourcePath,
+                         @(testData[x].sourcePath),
                          @"index %u", x);
     NSInteger totalLines = 0;
     NSInteger codeLines = 0;

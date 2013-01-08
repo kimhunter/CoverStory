@@ -150,4 +150,6 @@ static NSString * const kFilter = @"filter";
     }
     return NO;
 }
+
 @end
+
