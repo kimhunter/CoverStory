@@ -36,8 +36,8 @@
 
 #define kCoverStoryFilterStringTypeKey @"filterStringType" // CoverStoryFilterStringType
 
-enum {
-  kCoverStoryFilterStringTypeWildcardPattern = 0,
-  kCoverStoryFilterStringTypeRegularExpression
+typedef NS_ENUM(NSInteger, CoverStoryFilterStringType)
+{
+    kCoverStoryFilterStringTypeWildcardPattern = 0,
+    kCoverStoryFilterStringTypeRegularExpression
 };
-typedef NSInteger CoverStoryFilterStringType;
