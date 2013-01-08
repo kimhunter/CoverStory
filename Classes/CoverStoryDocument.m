@@ -891,8 +891,7 @@ typedef NS_ENUM(NSInteger, CSMessageType)
     {
         // starting a reload keeps pushing to the existing data, so block it until
         // we're done.
-        [self addMessageFromThread:@"Still loading data, can't start a reload."
-                       messageType:kCSMessageTypeWarning];
+        [self addMessageFromThread:@"Still loading data, can't start a reload." messageType:kCSMessageTypeWarning];
         return;
     }
     
@@ -903,13 +902,9 @@ typedef NS_ENUM(NSInteger, CSMessageType)
     [messageView_ setString:@""];
     
     NSError *error = nil;
-    if (![self readFromURL:[self fileURL]
-                    ofType:[self fileType]
-                     error:&error])
+    if (![self readFromURL:[self fileURL] ofType:[self fileType] error:&error])
     {
-        [self addMessageFromThread:@"couldn't reload file"
-                              path:[[self fileURL] path]
-                       messageType:kCSMessageTypeError];
+        [self addMessageFromThread:@"couldn't reload file" path:[[self fileURL] path] messageType:kCSMessageTypeError];
     }
 }
 
@@ -1093,13 +1088,10 @@ typedef NS_ENUM(NSInteger, CSMessageType)
     return !openingInThread_;
 }
 
-- (void)addMessageFromThread:(NSString *)message
-                 messageType:(CSMessageType)msgType
+- (void)addMessageFromThread:(NSString *)message messageType:(CSMessageType)msgType
 {
     NSDictionary *messageInfo = @{@"message" : message, @"msgType" : @(msgType)};
-    [self performSelectorOnMainThread:@selector(addMessage:)
-                           withObject:messageInfo
-                        waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(addMessage:) withObject:messageInfo waitUntilDone:NO];
 }
 
 - (void)addMessageFromThread:(NSString *)message
