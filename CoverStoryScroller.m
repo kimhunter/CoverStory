@@ -23,7 +23,6 @@
 
 @implementation CoverStoryScroller
 
-
 - (void)drawRect:(NSRect)rect
 {
     NSRect bounds = [self bounds];
@@ -64,10 +63,10 @@
     
     // If we have coverage data, draw the lines to denote lines we didn't hit
     // over the track. Note that this looks FAR better than Shark's impl.
-    if (coverageData_)
+    if (_coverageData)
     {
         NSRect slot          = [self rectForPart:NSScrollerKnobSlot];
-        NSUInteger count     = [coverageData_ count];
+        NSUInteger count     = [_coverageData count];
         CGFloat oldLineWidth = [NSBezierPath defaultLineWidth];
         [[[NSColor redColor] colorWithAlphaComponent:0.8] set];
         
@@ -76,7 +75,7 @@
         [NSBezierPath setDefaultLineWidth:NSHeight(slot) / count];
         for (NSUInteger i = 0; i < count; ++i)
         {
-            CoverStoryCoverageLineData *data = coverageData_[i];
+            CoverStoryCoverageLineData *data = _coverageData[i];
             NSInteger hitCount               = [data hitCount];
             if (hitCount == 0)
             {
@@ -95,9 +94,9 @@
 
 - (void)setCoverageData:(NSArray *)coverageData
 {
-    if (coverageData != coverageData_)
+    if (coverageData != _coverageData)
     {
-        coverageData_ = coverageData;
+        _coverageData = coverageData;
         [self setNeedsDisplay:YES];
     }
 }

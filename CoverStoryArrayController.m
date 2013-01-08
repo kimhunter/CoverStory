@@ -23,8 +23,8 @@
 #import "NSUserDefaultsController+KeyValues.h"
 
 static NSString *const kPrefsToWatch[] = {
-  kCoverStorySystemSourcesPatternsKey,
-  kCoverStoryUnittestSourcesPatternsKey,
+    kCoverStorySystemSourcesPatternsKey,
+    kCoverStoryUnittestSourcesPatternsKey,
 };
 
 #define kCoverStoryHideSDKSources @"hideSDKSources"
@@ -33,141 +33,160 @@ static NSString *const kPrefsToWatch[] = {
 #define kCoverStoryFilterString @"filterString"
 
 static NSString *const kDocumentKeyPathsToWatch[] = {
-  kCoverStoryHideSDKSources,
-  kCoverStoryHideUnittestSources,
-  kCoverStoryRemoveCommonSourcePrefix,
-  kCoverStoryFilterString
+    kCoverStoryHideSDKSources,
+    kCoverStoryHideUnittestSources,
+    kCoverStoryRemoveCommonSourcePrefix,
+    kCoverStoryFilterString
 };
 
 @implementation CoverStoryArrayController
 
-- (void)dealloc {
-  for (size_t i = 0;
-       i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]);
-       ++i) {
-    [owningDocument_ removeObserver:self forKeyPath:kDocumentKeyPathsToWatch[i]];
-  }
-  NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
-  for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(NSString*); ++i) {
-    [defaults removeObserver:self
-                  forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]];
-  }
-
+- (void)dealloc
+{
+    for (size_t i = 0; i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]); ++i)
+    {
+        [_owningDocument removeObserver:self forKeyPath:kDocumentKeyPathsToWatch[i]];
+    }
+    NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
+    for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(NSString *); ++i)
+    {
+        [defaults removeObserver:self forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]];
+    }
+    
 }
 
 
-- (void)awakeFromNib {
-  for (size_t i = 0;
-       i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]);
-       ++i) {
-    [owningDocument_ addObserver:self
-                      forKeyPath:kDocumentKeyPathsToWatch[i]
-                         options:0
-                         context:nil];
-  }
-  NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
-  for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(NSString*); ++i) {
-    [defaults addObserver:self
-               forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]
-                  options:0
-                  context:nil];
-  }
+- (void)awakeFromNib
+{
+    for (size_t i = 0; i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]); ++i)
+    {
+        [_owningDocument addObserver:self
+                          forKeyPath:kDocumentKeyPathsToWatch[i]
+                             options:0
+                             context:nil];
+    }
+    NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
+    for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(NSString *); ++i)
+    {
+        [defaults addObserver:self
+                   forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]
+                      options:0
+                      context:nil];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
-                       context:(void *)context {
-  BOOL handled = NO;
-  if ([object isEqualTo:[NSUserDefaultsController sharedUserDefaultsController]]) {
-    if ([keyPath isEqualToString:
-         [NSUserDefaultsController cs_valuesKey:kCoverStorySystemSourcesPatternsKey]]) {
-      if ([owningDocument_ hideSDKSources]) {
-        // if we're hiding them then update because the pattern changed
-        [self rearrangeObjects];
-        handled = YES;
-      }
-    } else if ([keyPath isEqualToString:
-                [NSUserDefaultsController cs_valuesKey:kCoverStoryUnittestSourcesPatternsKey]]) {
-      if ([owningDocument_ hideUnittestSources]) {
-        // if we're hiding them then update because the pattern changed
-        [self rearrangeObjects];
-        handled = YES;
-      }
+                       context:(void *)context
+{
+    BOOL handled = NO;
+    if ([object isEqualTo:[NSUserDefaultsController sharedUserDefaultsController]])
+    {
+        if ([keyPath isEqualToString:[NSUserDefaultsController cs_valuesKey:kCoverStorySystemSourcesPatternsKey]])
+        {
+            if ([_owningDocument hideSDKSources])
+            {
+                // if we're hiding them then update because the pattern changed
+                [self rearrangeObjects];
+                handled = YES;
+            }
+        }
+        else if ([keyPath isEqualToString:[NSUserDefaultsController cs_valuesKey:kCoverStoryUnittestSourcesPatternsKey]])
+        {
+            if ([_owningDocument hideUnittestSources])
+            {
+                // if we're hiding them then update because the pattern changed
+                [self rearrangeObjects];
+                handled = YES;
+            }
+        }
     }
-  } else if ([object isEqualTo:owningDocument_]) {
-    for (size_t i = 0;
-         i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]);
-         ++i) {
-      if ([keyPath isEqualToString:kDocumentKeyPathsToWatch[i]]) {
-        // user has changed a setting that requires a rearrange
-        [self rearrangeObjects];
-        handled = YES;
-      }
+    else if ([object isEqualTo:_owningDocument])
+    {
+        for (size_t i = 0; i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]); ++i)
+        {
+            if ([keyPath isEqualToString:kDocumentKeyPathsToWatch[i]])
+            {
+                // user has changed a setting that requires a rearrange
+                [self rearrangeObjects];
+                handled = YES;
+            }
+        }
     }
-  }
-  if (!handled) {
-    _GTMDevLog(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
-  }
+    if (!handled)
+    {
+        _GTMDevLog(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
+    }
 }
 
-- (void)updateCommonPathPrefix {
-  if (!owningDocument_) return;
-
-  NSString *newPrefix = nil;
-
-  // now figure out a new prefix
-  NSArray *arranged = [self arrangedObjects];
-  if ([arranged count] == 0) {
-    // empty string
-    newPrefix = @"";
-  } else {
-    // process the list to find the common prefix
-
-    // start w/ the first path, and now loop throught them all, but give up
-    // the moment he only common prefix is "/"
-    NSArray *sourcePaths = [arranged valueForKey:@"sourcePath"];
-    NSEnumerator *enumerator = [sourcePaths objectEnumerator];
-    newPrefix = [enumerator nextObject];
-    NSString *basePath;
-    while (([newPrefix length] > 1) &&
-           (basePath = [enumerator nextObject])) {
-      newPrefix = [newPrefix commonPrefixWithString:basePath
-                                            options:NSLiteralSearch];
-    }
-    // if you have two files of:
-    //   /Foo/bar/spam.m
-    //   /Foo/baz/wee.m
-    // we end up here w/ "/Foo/ba" as the common prefix, but we don't want
-    // to do that, so we make sure we end in a slash
-    if (![newPrefix hasSuffix:@"/"]) {
-      NSRange lastSlash = [newPrefix rangeOfString:@"/"
-                                           options:NSBackwardsSearch];
-      if (lastSlash.location == NSNotFound) {
+- (void)updateCommonPathPrefix
+{
+    if (!_owningDocument)
+        return;
+    
+    NSString *newPrefix = nil;
+    
+    // now figure out a new prefix
+    NSArray *arranged = [self arrangedObjects];
+    if ([arranged count] == 0)
+    {
+        // empty string
         newPrefix = @"";
-      } else {
-        newPrefix = [newPrefix substringToIndex:NSMaxRange(lastSlash)];
-      }
     }
-    // if we just have the leading "/", use no prefix
-    if ([newPrefix length] <= 1) {
-      newPrefix = @"";
+    else
+    {
+        // process the list to find the common prefix
+        
+        // start w/ the first path, and now loop throught them all, but give up
+        // the moment he only common prefix is "/"
+        NSArray *sourcePaths     = [arranged valueForKey:@"sourcePath"];
+        NSEnumerator *enumerator = [sourcePaths objectEnumerator];
+        newPrefix = [enumerator nextObject];
+        NSString *basePath;
+        while (([newPrefix length] > 1) && (basePath = [enumerator nextObject]))
+        {
+            newPrefix = [newPrefix commonPrefixWithString:basePath options:NSLiteralSearch];
+        }
+        // if you have two files of:
+        //   /Foo/bar/spam.m
+        //   /Foo/baz/wee.m
+        // we end up here w/ "/Foo/ba" as the common prefix, but we don't want
+        // to do that, so we make sure we end in a slash
+        if (![newPrefix hasSuffix:@"/"])
+        {
+            NSRange lastSlash = [newPrefix rangeOfString:@"/" options:NSBackwardsSearch];
+            if (lastSlash.location == NSNotFound)
+            {
+                newPrefix = @"";
+            }
+            else
+            {
+                newPrefix = [newPrefix substringToIndex:NSMaxRange(lastSlash)];
+            }
+        }
+        // if we just have the leading "/", use no prefix
+        if ([newPrefix length] <= 1)
+        {
+            newPrefix = @"";
+        }
     }
-  }
-  // send it back to the document
-  [owningDocument_ setCommonPathPrefix:newPrefix];
+    // send it back to the document
+    [_owningDocument setCommonPathPrefix:newPrefix];
 }
 
-- (void)rearrangeObjects {
-  // this fires when the filtering changes
-  [super rearrangeObjects];
-  [self updateCommonPathPrefix];
+- (void)rearrangeObjects
+{
+    // this fires when the filtering changes
+    [super rearrangeObjects];
+    [self updateCommonPathPrefix];
 }
 
-- (void)setContent:(id)content {
-  // this fires as results are added during a load
-  [super setContent:content];
-  [self updateCommonPathPrefix];
+- (void)setContent:(id)content
+{
+    // this fires as results are added during a load
+    [super setContent:content];
+    [self updateCommonPathPrefix];
 }
 
 @end

@@ -22,8 +22,8 @@
 @class CoverStoryDocument;
 
 @interface CoverStoryArrayController : NSArrayController {
- @private
-  IBOutlet CoverStoryDocument *owningDocument_;
+@private
+    IBOutlet CoverStoryDocument *_owningDocument;
 }
 @end
 
