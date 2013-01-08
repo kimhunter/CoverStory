@@ -832,7 +832,7 @@
 				COVERSTORY_SUFEEDURL = "http://coverstory.googlecode.com/svn/trunk/SparkleData/CoverStoryAppcast.xml";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREFIX_HEADER = CoverStoryDocumentTypes.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -855,7 +855,7 @@
 				COVERSTORY_SUFEEDURL = "http://coverstory.googlecode.com/svn/trunk/SparkleData/CoverStoryAppcast.xml";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREFIX_HEADER = CoverStoryDocumentTypes.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -877,6 +877,7 @@
 				COVERSTORY_VERSION_BUGFIX = 0;
 				COVERSTORY_VERSION_MAJOR = 4;
 				COVERSTORY_VERSION_MINOR = 3;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
@@ -896,6 +897,7 @@
 				COVERSTORY_VERSION_BUGFIX = 0;
 				COVERSTORY_VERSION_MAJOR = 4;
 				COVERSTORY_VERSION_MINOR = 3;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					NS_BLOCK_ASSERTIONS,
