@@ -55,7 +55,6 @@
 		8BB788F811B8467800AB31AF /* CoverStoryArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB788F711B8467800AB31AF /* CoverStoryArrayController.m */; };
 		8BB7893111B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB7893011B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m */; settings = {COMPILER_FLAGS = ""; }; };
 		8BC04E2C0DB0459100C2D1CA /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC04E290DB0459100C2D1CA /* info.png */; };
-		8BC04E2D0DB0459100C2D1CA /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC04E2A0DB0459100C2D1CA /* error.png */; };
 		8BC04E2E0DB0459100C2D1CA /* warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC04E2B0DB0459100C2D1CA /* warning.png */; };
 		8BC4AAB80D94D06100437182 /* CoverStoryCodeViewTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BC4AAB70D94D06100437182 /* CoverStoryCodeViewTableView.m */; };
 		8BCDD8010E09853F006EBB62 /* Reload.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCDD7FF0E09853F006EBB62 /* Reload.png */; };
@@ -70,11 +69,9 @@
 		8BFD651E0B405B6400AFCDA2 /* CoverStory.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8BFD651D0B405B6400AFCDA2 /* CoverStory.icns */; };
 		8BFE723D0B46FE3400A3C7DD /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFE723C0B46FE3400A3C7DD /* Carbon.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
-		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC310486D014006FF6A4 /* CoverStoryDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* CoverStoryDocument.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		9DC8D3BD14F490A800CEB21C /* CoverStory_fdopen2003.c in Sources */ = {isa = PBXBuildFile; fileRef = 9DC8D3BA14F490A800CEB21C /* CoverStory_fdopen2003.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F41390DD0D77103C00F72B31 /* GTMNSFileManager+Path.m in Sources */ = {isa = PBXBuildFile; fileRef = F41390DC0D77103C00F72B31 /* GTMNSFileManager+Path.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F41390F50D771A5400F72B31 /* GTMNSEnumerator+Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = F41390F40D771A5400F72B31 /* GTMNSEnumerator+Filter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F41A325311B6BA1A00176CCC /* GCovVersionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F41A325211B6BA1A00176CCC /* GCovVersionManager.m */; settings = {COMPILER_FLAGS = ""; }; };
@@ -151,7 +148,7 @@
 		2A37F4ACFDCFA73011CA2CEA /* CoverStoryDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverStoryDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CoverStoryDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; explicitFileType = wrapper.rtfd; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		63BC85EA0B4D863400CDC9E5 /* main.css */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = main.css; sourceTree = "<group>"; };
 		8B198D2F0C7DF72D002E4E3F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		8B2A9C6A0D84F84600599386 /* gcov.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gcov.icns; sourceTree = "<group>"; };
@@ -185,9 +182,8 @@
 		8BB7892F11B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaultsController+KeyValues.h"; sourceTree = "<group>"; };
 		8BB7893011B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaultsController+KeyValues.m"; sourceTree = "<group>"; };
 		8BBEC3630DD0E02400E5D45D /* openscript.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; path = openscript.applescript; sourceTree = "<group>"; };
-		8BC04E290DB0459100C2D1CA /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = SOURCE_ROOT; };
-		8BC04E2A0DB0459100C2D1CA /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = SOURCE_ROOT; };
-		8BC04E2B0DB0459100C2D1CA /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = SOURCE_ROOT; };
+		8BC04E290DB0459100C2D1CA /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
+		8BC04E2B0DB0459100C2D1CA /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
 		8BC4AAB60D94D06100437182 /* CoverStoryCodeViewTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryCodeViewTableView.h; sourceTree = "<group>"; };
 		8BC4AAB70D94D06100437182 /* CoverStoryCodeViewTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverStoryCodeViewTableView.m; sourceTree = "<group>"; };
 		8BCDD7FF0E09853F006EBB62 /* Reload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Reload.png; sourceTree = "<group>"; };
@@ -203,11 +199,10 @@
 		8BFD613F0B3F9DE500AFCDA2 /* CoverStoryApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverStoryApplicationDelegate.m; sourceTree = "<group>"; };
 		8BFD651D0B405B6400AFCDA2 /* CoverStory.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CoverStory.icns; sourceTree = "<group>"; };
 		8BFE723C0B46FE3400A3C7DD /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		8D15AC370486D014006FF6A4 /* CoverStory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoverStory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DC8D3B714F48EC800CEB21C /* DebugMacOSX.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = DebugMacOSX.xcconfig; path = Project/DebugMacOSX.xcconfig; sourceTree = "<group>"; };
 		9DC8D3B814F48EC800CEB21C /* ReleaseMacOSX.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = ReleaseMacOSX.xcconfig; path = Project/ReleaseMacOSX.xcconfig; sourceTree = "<group>"; };
-		9DC8D3BA14F490A800CEB21C /* CoverStory_fdopen2003.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CoverStory_fdopen2003.c; sourceTree = "<group>"; };
 		F41390DB0D77103C00F72B31 /* GTMNSFileManager+Path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSFileManager+Path.h"; sourceTree = "<group>"; };
 		F41390DC0D77103C00F72B31 /* GTMNSFileManager+Path.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSFileManager+Path.m"; sourceTree = "<group>"; };
 		F41390F30D771A5400F72B31 /* GTMNSEnumerator+Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSEnumerator+Filter.h"; sourceTree = "<group>"; };
@@ -217,7 +212,7 @@
 		F41A326911B6BB9800176CCC /* GTMObjectSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMObjectSingleton.h; sourceTree = "<group>"; };
 		F426B6DB0E0A1D7E00348386 /* English */ = {isa = PBXFileReference; lastKnownFileType = folder; name = English; path = "English.lproj/CoverStory Help"; sourceTree = "<group>"; };
 		F426B70E0E0A24AE00348386 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F426B70F0E0A24AE00348386 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
+		F426B70F0E0A24AE00348386 /*  */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ""; sourceTree = "<group>"; };
 		F426B7130E0A251300348386 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		F426B7420E0A261000348386 /* DebugUnittest.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = DebugUnittest.xcconfig; path = Target/DebugUnittest.xcconfig; sourceTree = "<group>"; };
 		F426B7430E0A261000348386 /* ReleaseUnittest.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = ReleaseUnittest.xcconfig; path = Target/ReleaseUnittest.xcconfig; sourceTree = "<group>"; };
@@ -351,7 +346,6 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				9DC8D3B914F490A800CEB21C /* SnowLeopardGcov */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -370,7 +364,6 @@
 				8BCDD8710E0AA18A006EBB62 /* UnitTests.png */,
 				8BCDD86D0E0A1C55006EBB62 /* SDK.png */,
 				8BC04E290DB0459100C2D1CA /* info.png */,
-				8BC04E2A0DB0459100C2D1CA /* error.png */,
 				8BC04E2B0DB0459100C2D1CA /* warning.png */,
 				8BFD651D0B405B6400AFCDA2 /* CoverStory.icns */,
 				8B2A9C6A0D84F84600599386 /* gcov.icns */,
@@ -381,7 +374,6 @@
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				63BC85EA0B4D863400CDC9E5 /* main.css */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
-				F426B70F0E0A24AE00348386 /* UnitTests-Info.plist */,
 				F426B6DA0E0A1D7E00348386 /* CoverStory Help */,
 				F4CA81EE0DAAC44F00B4AB10 /* CoverStoryDocument.xib */,
 				F4CA81F00DAAC44F00B4AB10 /* MainMenu.xib */,
@@ -389,7 +381,7 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				8B408E820F8E37BE00DF540E /* HTMLExport.strings */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
@@ -426,14 +418,6 @@
 				8B67DF8311B96380000DB052 /* CreateAppcast.sh */,
 			);
 			path = BuildScripts;
-			sourceTree = "<group>";
-		};
-		9DC8D3B914F490A800CEB21C /* SnowLeopardGcov */ = {
-			isa = PBXGroup;
-			children = (
-				9DC8D3BA14F490A800CEB21C /* CoverStory_fdopen2003.c */,
-			);
-			path = SnowLeopardGcov;
 			sourceTree = "<group>";
 		};
 		F4138F240D751FCF00F72B31 /* Foundation */ = {
@@ -477,6 +461,7 @@
 		F426B7F30E0AB70200348386 /* UnitTesting */ = {
 			isa = PBXGroup;
 			children = (
+				F426B70F0E0A24AE00348386 /*  */,
 				F426B7500E0A275300348386 /* CoverStoryCoverageDataTest.m */,
 				F487520711B6CA8800774A63 /* GCovVersionManagerTest.m */,
 				F426B7F50E0AB73C00348386 /* TestData */,
@@ -608,7 +593,6 @@
 			files = (
 				8B408E5D0F8DBB2E00DF540E /* coverstory.js in Resources */,
 				8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */,
-				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				8BFD651E0B405B6400AFCDA2 /* CoverStory.icns in Resources */,
 				63BC85EC0B4D863400CDC9E5 /* main.css in Resources */,
 				F4CA81F20DAAC44F00B4AB10 /* CoverStoryDocument.xib in Resources */,
@@ -617,7 +601,6 @@
 				8B2A9C6E0D84F84600599386 /* gcno.icns in Resources */,
 				8B2A9C6F0D84F84600599386 /* gcda.icns in Resources */,
 				8BC04E2C0DB0459100C2D1CA /* info.png in Resources */,
-				8BC04E2D0DB0459100C2D1CA /* error.png in Resources */,
 				8BC04E2E0DB0459100C2D1CA /* warning.png in Resources */,
 				8BCDD8010E09853F006EBB62 /* Reload.png in Resources */,
 				8BCDD86E0E0A1C55006EBB62 /* SDK.png in Resources */,
@@ -730,7 +713,6 @@
 				F41A325311B6BA1A00176CCC /* GCovVersionManager.m in Sources */,
 				8BB788F811B8467800AB31AF /* CoverStoryArrayController.m in Sources */,
 				8BB7893111B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m in Sources */,
-				9DC8D3BD14F490A800CEB21C /* CoverStory_fdopen2003.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +820,9 @@
 				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = CoverStory;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -861,7 +845,9 @@
 				INFOPLIST_PREPROCESS = YES;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = CoverStory;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
@@ -923,9 +909,11 @@
 					"\"$(SRCROOT)/external\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "UnitTests-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/UnitTesting/UnitTests-Info.plist";
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = UnitTests;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = octest;
@@ -945,8 +933,9 @@
 					"\"$(SRCROOT)/external\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = "UnitTests-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/UnitTesting/UnitTests-Info.plist";
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = UnitTests;
 				SDKROOT = macosx;
