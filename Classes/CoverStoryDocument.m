@@ -582,6 +582,10 @@ typedef NS_ENUM(NSInteger, CSMessageType)
                             path    = [message substringToIndex:range.location];
                             message = [message substringFromIndex:NSMaxRange(range)];
                         }
+                        if ([message hasSuffix:@"'404*', prefer '402*'"])// || [message hasSuffix:@"cannot open source file"])
+                        {
+                            continue;
+                        }
                         [self addMessageFromThread:message
                                               path:path
                                        messageType:kCSMessageTypeError];
