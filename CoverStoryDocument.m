@@ -31,8 +31,8 @@
 #import "CoverStoryValueTransformers.h"
 #import "GCovVersionManager.h"
 
-const NSInteger kCoverStorySDKToolbarTag = 1026;
-const NSInteger kCoverStoryUnittestToolbarTag = 1027;
+const NSInteger kCoverStorySDKToolbarTag          = 1026;
+const NSInteger kCoverStoryUnittestToolbarTag     = 1027;
 const NSInteger kCoverStoryCommonPrefixToolbarTag = 1028;
 
 NSString *const kCoverStoryErrorDomain = @"CoverStoryErrorDomain";
@@ -44,7 +44,7 @@ const NSInteger kCoverStoryExportError = 1;
 @end
 
 @interface NSOperationQueue (CoverStorySharedOpQueue)
-+ (NSOperationQueue*)cs_sharedOperationQueue;
++ (NSOperationQueue *)cs_sharedOperationQueue;
 @end
 
 @interface NSFileManager (CoverStoryThreading)
@@ -52,78 +52,72 @@ const NSInteger kCoverStoryExportError = 1;
 @end
 
 typedef enum {
-  kCSMessageTypeError,
-  kCSMessageTypeWarning,
-  kCSMessageTypeInfo
+    kCSMessageTypeError,
+    kCSMessageTypeWarning,
+    kCSMessageTypeInfo
 } CSMessageType;
 
 @interface CoverStoryDocument ()
-- (void)openFolderInThread:(NSString*)path;
-- (void)openFileInThread:(NSString*)path;
+- (void)openFolderInThread:(NSString *)path;
+- (void)openFileInThread:(NSString *)path;
 - (void)backgroundWorkDone:(id)sender;
 - (void)setOpenThreadState:(BOOL)threadRunning;
 - (BOOL)processCoverageForFolder:(NSString *)path;
 - (void)cleanupTempDir:(NSString *)tempDir;
 - (void)loadCoveragePath:(NSString *)fullPath;
-- (BOOL)processCoverageForFiles:(NSArray *)filenames
-                       inFolder:(NSString *)folderPath;
+- (BOOL)processCoverageForFiles:(NSArray *)filenames inFolder:(NSString *)folderPath;
 - (BOOL)addFileData:(CoverStoryCoverageFileData *)fileData;
-- (void)addMessageFromThread:(NSString *)message
-                        path:(NSString*)path
-                 messageType:(CSMessageType)msgType;
-- (void)addMessageFromThread:(NSString *)message
-                 messageType:(CSMessageType)msgType;
+- (void)addMessageFromThread:(NSString *)message path:(NSString *)path messageType:(CSMessageType)msgType;
+- (void)addMessageFromThread:(NSString *)message messageType:(CSMessageType)msgType;
 - (void)addMessage:(NSDictionary *)msgInfo;
 - (BOOL)isClosed;
 - (void)moveSelection:(NSUInteger)offset;
 - (void)finishedLoadingFileDatas:(id)ignored;
 @end
 
+
 @implementation CoverStoryDocument
 
-+ (void)registerDefaults {
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  NSDictionary *documentDefaults =
-    [NSDictionary dictionaryWithObjectsAndKeys:
-     [NSNumber numberWithInt:kCoverStoryFilterStringTypeWildcardPattern],
-     kCoverStoryFilterStringTypeKey,
-     [NSNumber numberWithBool:YES],
-     kCoverStoryRemoveCommonSourcePrefixKey,
-     nil];
-
-  [defaults registerDefaults:documentDefaults];
++ (void)registerDefaults
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *documentDefaults = @{
+                                       kCoverStoryFilterStringTypeKey : @(kCoverStoryFilterStringTypeWildcardPattern),
+                                       kCoverStoryRemoveCommonSourcePrefixKey : @YES
+                                      };
+    [defaults registerDefaults:documentDefaults];
 }
 
-- (id)init {
-  if ((self = [super init])) {
+- (id)init
+{
+    if ((self = [super init]))
+    {
 
-    dataSet_ = [[CoverStoryCoverageSet alloc] init];
+        dataSet_ = [[CoverStoryCoverageSet alloc] init];
 
-    NSString *path;
-    NSFileWrapper *wrapper;
-    NSBundle *mainBundle = [NSBundle mainBundle];
+        NSString *path;
+        NSFileWrapper *wrapper;
+        NSBundle *mainBundle = [NSBundle mainBundle];
 
-    path        = [mainBundle pathForResource:@"error" ofType:@"png"];
-    wrapper     = [[NSFileWrapper alloc] initWithPath:path];
-    errorIcon_  = [[NSTextAttachment alloc] initWithFileWrapper:wrapper];
+        path       = [mainBundle pathForResource:@"error" ofType:@"png"];
+        wrapper    = [[NSFileWrapper alloc] initWithPath:path];
+        errorIcon_ = [[NSTextAttachment alloc] initWithFileWrapper:wrapper];
 
-    path         = [mainBundle pathForResource:@"warning" ofType:@"png"];
-    wrapper      = [[NSFileWrapper alloc] initWithPath:path];
-    warningIcon_ = [[NSTextAttachment alloc] initWithFileWrapper:wrapper];
+        path         = [mainBundle pathForResource:@"warning" ofType:@"png"];
+        wrapper      = [[NSFileWrapper alloc] initWithPath:path];
+        warningIcon_ = [[NSTextAttachment alloc] initWithFileWrapper:wrapper];
 
-    path         = [mainBundle pathForResource:@"info" ofType:@"png"];
-    wrapper      = [[NSFileWrapper alloc] initWithPath:path];
-    infoIcon_    = [[NSTextAttachment alloc] initWithFileWrapper:wrapper];
+        path      = [mainBundle pathForResource:@"info" ofType:@"png"];
+        wrapper   = [[NSFileWrapper alloc] initWithPath:path];
+        infoIcon_ = [[NSTextAttachment alloc] initWithFileWrapper:wrapper];
 
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    hideSDKSources_ = [ud boolForKey:kCoverStoryHideSystemSourcesKey];
-    hideUnittestSources_ = [ud boolForKey:kCoverStoryHideUnittestSourcesKey];
-    removeCommonSourcePrefix_ =
-        [ud boolForKey:kCoverStoryRemoveCommonSourcePrefixKey];
-  }
-  return self;
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        hideSDKSources_           = [ud boolForKey:kCoverStoryHideSystemSourcesKey];
+        hideUnittestSources_      = [ud boolForKey:kCoverStoryHideUnittestSourcesKey];
+        removeCommonSourcePrefix_ = [ud boolForKey:kCoverStoryRemoveCommonSourcePrefixKey];
+    }
+    return self;
 }
-
 
 
 - (void)awakeFromNib {
@@ -144,97 +138,109 @@ typedef enum {
   [sourceFilesController_ setSortDescriptors:[NSArray arrayWithObject:ascending]];
 }
 
-- (NSString *)windowNibName {
-  return @"CoverStoryDocument";
+- (NSString *)windowNibName
+{
+    return @"CoverStoryDocument";
 }
 
-- (CoverStoryCoverageSet *)dataSet {
-  return dataSet_;
+- (CoverStoryCoverageSet *)dataSet
+{
+    return dataSet_;
 }
 
 // Called as a performSelectorOnMainThread, so must check to make sure
 // we haven't been closed.
-- (BOOL)addFileData:(CoverStoryCoverageFileData *)fileData {
-  if ([self isClosed]) return NO;
-  ++numFileDatas_;
-  BOOL isGood = [[self dataSet] addFileData:fileData messageReceiver:self];
-  return isGood;
+- (BOOL)addFileData:(CoverStoryCoverageFileData *)fileData
+{
+    if ([self isClosed])
+    {
+        return NO;
+    }
+    ++numFileDatas_;
+    BOOL isGood = [[self dataSet] addFileData:fileData messageReceiver:self];
+    return isGood;
 }
 
 - (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper
                      ofType:(NSString *)typeName
-                      error:(NSError **)outError {
-  BOOL isGood = NO;
-  numFileDatas_ = 0;
+                      error:(NSError * *)outError
+{
+    BOOL isGood = NO;
+    numFileDatas_ = 0;
 #if DEBUG
-  startDate_ = [NSDate date];
+    startDate_ = [NSDate date];
 #endif
-
-  // the wrapper doesn't have the full path, but it's already set on us, so
-  // use that instead.
-  NSString *path = [[self fileURL] path];
-  if ([fileWrapper isDirectory]) {
-    NSString *message =
-      [NSString stringWithFormat:@"Scanning for coverage data in '%@'",
-       path];
-    [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
-    [NSThread detachNewThreadSelector:@selector(openFolderInThread:)
-                             toTarget:self
-                           withObject:path];
-    isGood = YES;
-  } else if ([typeName isEqualToString:@kGCOVTypeName]) {
-    NSString *message =
-      [NSString stringWithFormat:@"Reading gcov data '%@'",
-       path];
-    [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
-    // load it and add it to our set
-    CoverStoryCoverageFileData *fileData =
-      [CoverStoryCoverageFileData coverageFileDataFromPath:path
-                                                  document:self
-                                           messageReceiver:self];
-    if (fileData) {
-      isGood = [self addFileData:fileData];
-    } else {
-      [self addMessageFromThread:@"Failed to load gcov data"
-                            path:path
-                     messageType:kCSMessageTypeError];
+    
+    // the wrapper doesn't have the full path, but it's already set on us, so
+    // use that instead.
+    NSString *path = [[self fileURL] path];
+    if ([fileWrapper isDirectory])
+    {
+        NSString *message = [NSString stringWithFormat:@"Scanning for coverage data in '%@'", path];
+        [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
+        [NSThread detachNewThreadSelector:@selector(openFolderInThread:)
+                                 toTarget:self
+                               withObject:path];
+        isGood = YES;
     }
-  } else {
-    NSString *message =
-      [NSString stringWithFormat:@"Processing coverage data in '%@'",
-       path];
-    [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
-    [NSThread detachNewThreadSelector:@selector(openFileInThread:)
-                             toTarget:self
-                           withObject:path];
-    isGood = YES;
-  }
-  return isGood;
+    else if ([typeName isEqualToString:@kGCOVTypeName])
+    {
+        NSString *message =
+        [NSString stringWithFormat:@"Reading gcov data '%@'",
+         path];
+        [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
+        // load it and add it to our set
+        CoverStoryCoverageFileData *fileData = [CoverStoryCoverageFileData coverageFileDataFromPath:path
+                                                                                           document:self
+                                                                                    messageReceiver:self];
+        if (fileData)
+        {
+            isGood = [self addFileData:fileData];
+        }
+        else
+        {
+            [self addMessageFromThread:@"Failed to load gcov data" path:path messageType:kCSMessageTypeError];
+        }
+    }
+    else
+    {
+        NSString *message =
+        [NSString stringWithFormat:@"Processing coverage data in '%@'", path];
+        [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
+        [NSThread detachNewThreadSelector:@selector(openFileInThread:)
+                                 toTarget:self
+                               withObject:path];
+        isGood = YES;
+    }
+    return isGood;
 }
 
-- (IBAction)openSelectedSource:(id)sender {
-  BOOL didOpen = NO;
-  NSArray *fileSelection = [sourceFilesController_ selectedObjects];
-  CoverStoryCoverageFileData *fileData = [fileSelection objectAtIndex:0];
-  NSString *path = [fileData sourcePath];
-  NSIndexSet *selectedRows = [codeTableView_ selectedRowIndexes];
-  if ([selectedRows count]) {
-    NSString *scriptPath = [[NSBundle mainBundle] pathForResource:@"openscript"
-                                                           ofType:@"scpt"
-                                                      inDirectory:@"Scripts"];
-    if (scriptPath) {
-      GTMScriptRunner *runner = [GTMScriptRunner runnerWithInterpreter:@"/usr/bin/osascript"];
-      [runner runScript:scriptPath
-               withArgs:[NSArray arrayWithObjects:
-                         path,
-                         [NSString stringWithFormat:@"%lu", (unsigned long)[selectedRows firstIndex] + 1],
-                         [NSString stringWithFormat:@"%lu", (unsigned long)[selectedRows lastIndex] + 1],
-                         nil]];
+
+- (IBAction)openSelectedSource:(id)sender
+{
+    BOOL didOpen                         = NO;
+    NSArray *fileSelection               = [sourceFilesController_ selectedObjects];
+    CoverStoryCoverageFileData *fileData = [fileSelection objectAtIndex:0];
+    NSString *path                       = [fileData sourcePath];
+    NSIndexSet *selectedRows             = [codeTableView_ selectedRowIndexes];
+
+    if ([selectedRows count])
+    {
+        NSString *scriptPath = [[NSBundle mainBundle] pathForResource:@"openscript"
+                                                               ofType:@"scpt"
+                                                          inDirectory:@"Scripts"];
+        if (scriptPath)
+        {
+            GTMScriptRunner *runner = [GTMScriptRunner runnerWithInterpreter:@"/usr/bin/osascript"];
+            [runner runScript:scriptPath withArgs:@[path,
+                                                    [NSString stringWithFormat:@"%lu", (unsigned long)[selectedRows firstIndex] + 1],
+                                                    [NSString stringWithFormat:@"%lu", (unsigned long)[selectedRows lastIndex] + 1]]];
+        }
     }
-  }
-  if (!didOpen) {
-    [[NSWorkspace sharedWorkspace] openFile:path];
-  }
+    if (!didOpen)
+    {
+        [[NSWorkspace sharedWorkspace] openFile:path];
+    }
 }
 
 - (BOOL)isDocumentEdited {
