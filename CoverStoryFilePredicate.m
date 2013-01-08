@@ -7,9 +7,9 @@
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 //  use this file except in compliance with the License.  You may obtain a copy
 //  of the License at
-// 
+//
 //  http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //  Unless required by applicable law or agreed to in writing, software
 //  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 //  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -34,109 +34,120 @@ static NSString * const kFilter = @"filter";
 
 @implementation CoverStoryFilePredicate
 
-+ (void)registerDefaults {
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  NSDictionary *predicateDefaults =
-  [NSDictionary dictionaryWithObjectsAndKeys:
-   [NSNumber numberWithBool:YES], // hide the systems sources by default
-   kCoverStoryHideSystemSourcesKey,
-   [NSArray arrayWithObjects:
-    [NSDictionary dictionaryWithObject:@"/usr/*" forKey:kFilter],
-    [NSDictionary dictionaryWithObject:@"/System/Library/Frameworks/*" forKey:kFilter],
-    [NSDictionary dictionaryWithObject:@"*/SDKs/MacOSX10.*" forKey:kFilter],
-    [NSDictionary dictionaryWithObject:@"*/SDKs/iPhone*" forKey:kFilter],
-    nil],
-   kCoverStorySystemSourcesPatternsKey,
-   
-   [NSNumber numberWithBool:NO], // do NOT hide the unittest sources by default
-   kCoverStoryHideUnittestSourcesKey,
-   [NSArray arrayWithObjects:
-    [NSDictionary dictionaryWithObject:@"*Test.[hHmM]" forKey:kFilter],
-    [NSDictionary dictionaryWithObject:@"*Test.mm" forKey:kFilter],
-    nil],
-   kCoverStoryUnittestSourcesPatternsKey,
-   nil];
-  
-  [defaults registerDefaults:predicateDefaults];
++ (void)registerDefaults
+{
+    NSUserDefaults *defaults        = [NSUserDefaults standardUserDefaults];
+    NSDictionary *predicateDefaults = @{
+        kCoverStoryHideSystemSourcesKey: @YES, // hide the systems sources by default
+        kCoverStorySystemSourcesPatternsKey: @[
+            @{kFilter:@"/usr/*"},
+            @{kFilter: @"/System/Library/Frameworks/*"},
+            @{kFilter:@"*/SDKs/MacOSX10.*"},
+            @{kFilter: @"*/SDKs/iPhone*"}
+        ],
+        kCoverStoryHideUnittestSourcesKey : @NO, // do NOT hide the unittest sources by default
+        kCoverStoryUnittestSourcesPatternsKey: @[
+            @{kFilter:@"*Test.[hHmM]"},
+            @{kFilter:@"*Test.mm"}
+        ]
+    };
+    
+    [defaults registerDefaults:predicateDefaults];
 }
 
-- (BOOL)evaluateWithObject:(id)object {
-  BOOL isGood = YES;
-  NSString *path = [object valueForKey:@"sourcePath"];
-  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-  BOOL hideSDKFiles = [document_ hideSDKSources];
-  if (hideSDKFiles) {
-    NSArray *systemSourcesPatterns =
-      [defaults arrayForKey:kCoverStorySystemSourcesPatternsKey];
-    if (systemSourcesPatterns) {
-      isGood = ![path cs_isMatchForPatternArray:systemSourcesPatterns];
+- (BOOL)evaluateWithObject:(id)object
+{
+    BOOL isGood              = YES;
+    NSString *path           = [object valueForKey:@"sourcePath"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    BOOL hideSDKFiles = [document_ hideSDKSources];
+    if (hideSDKFiles)
+    {
+        NSArray *systemSourcesPatterns =
+        [defaults arrayForKey:kCoverStorySystemSourcesPatternsKey];
+        if (systemSourcesPatterns)
+        {
+            isGood = ![path cs_isMatchForPatternArray:systemSourcesPatterns];
+        }
     }
-  }
-  if (isGood) {
-    BOOL hideUnittestFiles = [document_ hideUnittestSources];
-    if (hideUnittestFiles) {
-      NSArray *unittestSourcesPatterns =
-        [defaults arrayForKey:kCoverStoryUnittestSourcesPatternsKey];
-      if (unittestSourcesPatterns) {
-        isGood = ![path cs_isMatchForPatternArray:unittestSourcesPatterns];
-      }
+    if (isGood)
+    {
+        BOOL hideUnittestFiles = [document_ hideUnittestSources];
+        if (hideUnittestFiles)
+        {
+            NSArray *unittestSourcesPatterns =
+            [defaults arrayForKey:kCoverStoryUnittestSourcesPatternsKey];
+            if (unittestSourcesPatterns)
+            {
+                isGood = ![path cs_isMatchForPatternArray:unittestSourcesPatterns];
+            }
+        }
     }
-  }
-  if (isGood) {
-    NSString *text = [searchField_ stringValue];
-    if ([text length] == 0) {
-      isGood = YES;
-    } else {
-      CoverStoryFilterStringType type 
-        = [defaults integerForKey:kCoverStoryFilterStringTypeKey];
-      switch (type) {
-        default:
-        case kCoverStoryFilterStringTypeWildcardPattern:
-          isGood = [path cs_isWildcardPatternEqual:text];
-          break;
-          
-        case kCoverStoryFilterStringTypeRegularExpression:
-          isGood = [path cs_isRegularExpressionEqual:text];
-          break;
-      }
+    if (isGood)
+    {
+        NSString *text = [searchField_ stringValue];
+        if ([text length] == 0)
+        {
+            isGood = YES;
+        }
+        else
+        {
+            CoverStoryFilterStringType type
+            = [defaults integerForKey:kCoverStoryFilterStringTypeKey];
+            switch (type) {
+                default:
+                case kCoverStoryFilterStringTypeWildcardPattern:
+                    isGood = [path cs_isWildcardPatternEqual:text];
+                    break;
+                    
+                case kCoverStoryFilterStringTypeRegularExpression:
+                    isGood = [path cs_isRegularExpressionEqual:text];
+                    break;
+            }
+        }
     }
-  }
-  return isGood;
+    return isGood;
 }
 
 @end
 
 @implementation NSString (CoverStoryStringMatching)
-- (BOOL)cs_isRegularExpressionEqual:(NSString*)string {
-  // if the pattern didn't parse, always show things
-  BOOL result = YES;
-
-  // no point in catching errors since we do this as they type
-  GTMRegex *regex = [GTMRegex regexWithPattern:string
-                                       options:kGTMRegexOptionIgnoreCase];
-  if (regex) {
-    result = [regex matchesSubStringInString:self];
-  }
-  return result;
-}
-
-- (BOOL)cs_isWildcardPatternEqual:(NSString*)string {
-  NSString *pattern = [NSString stringWithFormat:@"*%@*", string];
-  int flags = FNM_CASEFOLD;
-  BOOL isGood = fnmatch([pattern UTF8String], [self UTF8String], flags) == 0;
-  return isGood;
-}
-
-- (BOOL)cs_isMatchForPatternArray:(NSArray *)patterns {
-  const char *utf8Self = [self UTF8String];
-  for (NSDictionary *patternDict in patterns) {
-    NSString *pattern = [patternDict objectForKey:kFilter];
-    if (([pattern length] > 0) &&
-        (fnmatch([pattern UTF8String], utf8Self, 0) == 0)) {
-      return YES;
+- (BOOL)cs_isRegularExpressionEqual:(NSString *)string
+{
+    // if the pattern didn't parse, always show things
+    BOOL result = YES;
+    
+    // no point in catching errors since we do this as they type
+    GTMRegex *regex = [GTMRegex regexWithPattern:string
+                                         options:kGTMRegexOptionIgnoreCase];
+    if (regex)
+    {
+        result = [regex matchesSubStringInString:self];
     }
-  }
-  return NO;
+    return result;
+}
+
+- (BOOL)cs_isWildcardPatternEqual:(NSString *)string
+{
+    NSString *pattern = [NSString stringWithFormat:@"*%@*", string];
+    int flags         = FNM_CASEFOLD;
+    BOOL isGood       = fnmatch([pattern UTF8String], [self UTF8String], flags) == 0;
+    return isGood;
+}
+
+- (BOOL)cs_isMatchForPatternArray:(NSArray *)patterns
+{
+    const char *utf8Self = [self UTF8String];
+    for (NSDictionary *patternDict in patterns)
+    {
+        NSString *pattern = [patternDict objectForKey:kFilter];
+        if (([pattern length] > 0) &&
+            (fnmatch([pattern UTF8String], utf8Self, 0) == 0))
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 @end

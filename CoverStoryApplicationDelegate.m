@@ -7,9 +7,9 @@
 //  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 //  use this file except in compliance with the License.  You may obtain a copy
 //  of the License at
-// 
+//
 //  http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //  Unless required by applicable law or agreed to in writing, software
 //  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 //  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -25,25 +25,27 @@
 #import "CoverStoryValueTransformers.h"
 
 @implementation CoverStoryApplicationDelegate
-- (void)applicationWillFinishLaunching:(NSNotification *)notification {
-  // Register default values for various classes so that prefs and menus 
-  // will have the right states.
-  [CoverStoryFilePredicate registerDefaults];
-  [CoverStoryDocument registerDefaults];
-  [CoverageLineDataToSourceLineTransformer registerDefaults];
-  
-  // Set our document controller up as the shared document controller
-  // so we don't get NSDocumentController instead.
-  __unused id docController = [[CoverStoryDocumentController alloc] init];
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
+{
+    // Register default values for various classes so that prefs and menus
+    // will have the right states.
+    [CoverStoryFilePredicate registerDefaults];
+    [CoverStoryDocument registerDefaults];
+    [CoverageLineDataToSourceLineTransformer registerDefaults];
+
+    // Set our document controller up as the shared document controller
+    // so we don't get NSDocumentController instead.
+    __unused id docController = [[CoverStoryDocumentController alloc] init];
 }
 
-- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)theApplication {
-  return NO;
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)theApplication
+{
+    return NO;
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)visibleWindows
 {
-    if(!visibleWindows)
+    if (!visibleWindows)
     {
         [[CoverStoryDocumentController sharedDocumentController] openDocument:self];
         return NO;
@@ -51,64 +53,75 @@
     return YES;
 }
 
-- (NSColor *)colorForKey:(NSString *)key {
-  NSUserDefaultsController *defaults
-    = [NSUserDefaultsController sharedUserDefaultsController];
-  id values = [defaults values];
-  NSData *colorData = [values valueForKey:key];
-  NSColor *color = nil;
-  if (colorData) {
-    color = (NSColor *)[NSUnarchiver unarchiveObjectWithData:colorData];
-  }
-  return color;
+- (NSColor *)colorForKey:(NSString *)key
+{
+    NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
+    id values = [defaults values];
+    NSData *colorData = [values valueForKey:key];
+    NSColor *color = nil;
+    if (colorData)
+    {
+        color = (NSColor *)[NSUnarchiver unarchiveObjectWithData:colorData];
+    }
+    return color;
 }
 
-- (void)setColor:(NSColor *)color forKey:(NSString *)key {
-  NSData *colorData = [NSArchiver archivedDataWithRootObject:color];
-  if (colorData) {
-    NSUserDefaultsController *defaults
-      = [NSUserDefaultsController sharedUserDefaultsController];
-    [[defaults defaults] setObject:colorData forKey:key];
-  }
+- (void)setColor:(NSColor *)color forKey:(NSString *)key
+{
+    NSData *colorData = [NSArchiver archivedDataWithRootObject:color];
+    if (colorData)
+    {
+        NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
+        [[defaults defaults] setObject:colorData forKey:key];
+    }
 }
 
-- (NSColor *)executedLineColor {
-  return [self colorForKey:kCoverStoryExecutedLineColorKey];
+- (NSColor *)executedLineColor
+{
+    return [self colorForKey:kCoverStoryExecutedLineColorKey];
 }
 
-- (void)setExecutedLineColor:(NSColor *)color {
-  [self setColor:color forKey:kCoverStoryExecutedLineColorKey];
+- (void)setExecutedLineColor:(NSColor *)color
+{
+    [self setColor:color forKey:kCoverStoryExecutedLineColorKey];
 }
 
-- (NSColor *)missedLineColor {
-  return [self colorForKey:kCoverStoryMissedLineColorKey];
+- (NSColor *)missedLineColor
+{
+    return [self colorForKey:kCoverStoryMissedLineColorKey];
 }
 
-- (void)setMissedLineColor:(NSColor *)color {
-  [self setColor:color forKey:kCoverStoryMissedLineColorKey];
+- (void)setMissedLineColor:(NSColor *)color
+{
+    [self setColor:color forKey:kCoverStoryMissedLineColorKey];
 }
 
-- (NSColor *)unexecutableLineColor {
-  return [self colorForKey:kCoverStoryUnexecutableLineColorKey];
+- (NSColor *)unexecutableLineColor
+{
+    return [self colorForKey:kCoverStoryUnexecutableLineColorKey];
 }
 
-- (void)setUnexecutableLineColor:(NSColor *)color {
-  [self setColor:color forKey:kCoverStoryUnexecutableLineColorKey];
+- (void)setUnexecutableLineColor:(NSColor *)color
+{
+    [self setColor:color forKey:kCoverStoryUnexecutableLineColorKey];
 }
 
-- (NSColor *)nonFeasibleLineColor {
-  return [self colorForKey:kCoverStoryNonFeasibleLineColorKey];
+- (NSColor *)nonFeasibleLineColor
+{
+    return [self colorForKey:kCoverStoryNonFeasibleLineColorKey];
 }
 
-- (void)setNonFeasibleLineColor:(NSColor *)color {
-  [self setColor:color forKey:kCoverStoryNonFeasibleLineColorKey];
+- (void)setNonFeasibleLineColor:(NSColor *)color
+{
+    [self setColor:color forKey:kCoverStoryNonFeasibleLineColorKey];
 }
 
-- (BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key {
-  return ([key isEqualToString:@"nonFeasibleLineColor"] ||
-          [key isEqualToString:@"unexecutableLineColor"] ||
-          [key isEqualToString:@"missedLineColor"] ||
-          [key isEqualToString:@"executedLineColor"]);
+- (BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key
+{
+    return ([key isEqualToString:@"nonFeasibleLineColor"] ||
+            [key isEqualToString:@"unexecutableLineColor"] ||
+            [key isEqualToString:@"missedLineColor"] ||
+            [key isEqualToString:@"executedLineColor"]);
 }
-  
+
 @end
