@@ -200,7 +200,7 @@ codeCoverage
         }
         else
         {
-            NSCharacterSet *linefeeds   = [NSCharacterSet characterSetWithCharactersInString:@"\n\r"];
+            NSCharacterSet *linefeeds   = [NSCharacterSet newlineCharacterSet];
             GTMRegex *nfLineRegex       = [GTMRegex regexWithPattern:@"//[[:blank:]]*COV_NF_LINE"];
             GTMRegex *nfRangeStartRegex = [GTMRegex regexWithPattern:@"//[[:blank:]]*COV_NF_START"];
             GTMRegex *nfRangeEndRegex   = [GTMRegex regexWithPattern:@"//[[:blank:]]*COV_NF_END"];
