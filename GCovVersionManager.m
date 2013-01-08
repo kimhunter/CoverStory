@@ -11,143 +11,163 @@
 #import "GTMNSEnumerator+Filter.h"
 
 @interface GCovVersionManager (PrivateMethods)
-+ (NSMutableDictionary*)collectVersionsInFolder:(NSString *)path;
++ (NSMutableDictionary *)collectVersionsInFolder:(NSString *)path;
 @end
 
 @implementation GCovVersionManager
 
 GTMOBJECT_SINGLETON_BOILERPLATE(GCovVersionManager, defaultManager);
 
-- (id)init {
-  if ((self = [super init])) {
-    // Start with what is in /usr/bin
-    NSMutableDictionary *map = [[self class] collectVersionsInFolder:@"/usr/bin"];
-    // Override it with what is in the Developer directory's /usr/bin.
-    // TODO: Should really use xcode-select -print-path as the starting point.
-    [map addEntriesFromDictionary:[[self class] collectVersionsInFolder:@"/Developer/usr/bin"]];
-    NSFileManager *fm = [NSFileManager defaultManager];
-    BOOL isDir = NO;
-    if ([fm fileExistsAtPath:@"/Applications/Xcode.app" isDirectory:&isDir]
-        && isDir) {
-      [map addEntriesFromDictionary:
-       [[self class] collectVersionsInFolder:@"/Applications/Xcode.app/Contents/Developer/usr/bin"]];
-    }
-    _versionMap = [map copy];
-  }
-  return self;
-}
-
-- (void) dealloc {
-  [_versionMap release];
-  [super dealloc];
-}
-
-- (NSString*)defaultGCovPath {
-  return [_versionMap objectForKey:@""];
-}
-
-- (NSArray*)installedVersions {
-  return [_versionMap allValues];
-}
-
-- (NSString*)versionFromGCovFile:(NSString*)path {
-  NSString *result = nil;
-
-  uint32 GCDA_HEADER = 'gcda';
-  uint32 GCDA_HEADER_WRONG_ENDIAN = 'adcg';
-  uint32 GCNO_HEADER = 'gcno';
-  uint32 GCNO_HEADER_WRONG_ENDIAN = 'oncg';
-
-  // Read in the file header and version number.
-  if ([path length]) {
-    const char* cPath = [path fileSystemRepresentation];
-    if (cPath) {
-      FILE *aFile = fopen(cPath, "r");
-      if (aFile) {
-        uint32 buffer[2];
-        if (fread(buffer, sizeof(uint32), 2, aFile) == 2) {
-          // Check the header.
-          if ((buffer[0] == GCDA_HEADER) ||
-              (buffer[0] == GCDA_HEADER_WRONG_ENDIAN) ||
-              (buffer[0] == GCNO_HEADER) ||
-              (buffer[0] == GCNO_HEADER_WRONG_ENDIAN)) {
-            uint32 ver = buffer[1];
-            BOOL flip = ((buffer[0] == GCDA_HEADER_WRONG_ENDIAN) ||
-                         (buffer[0] == GCNO_HEADER_WRONG_ENDIAN));
-            if (flip) {
-              ver =
-                ((ver & 0xff000000) >> 24) |
-                ((ver & 0x00ff0000) >>  8) |
-                ((ver & 0x0000ff00) <<  8) |
-                ((ver & 0x000000ff) << 24);
-            }
-
-            uint32 major = ((ver & 0xff000000) >> 24) - '0';
-            uint32 minor10s = ((ver & 0x00ff0000) >> 16) - '0';
-            uint32 minor1s = ((ver & 0x0000ff00) >> 8) - '0';
-            uint32 minor = minor10s * 10 + minor1s;
-            result = [NSString stringWithFormat:@"%u.%u", major, minor];
-          }
+- (id)init
+{
+    if ((self = [super init]))
+    {
+        // Start with what is in /usr/bin
+        NSMutableDictionary *map = [[self class] collectVersionsInFolder:@"/usr/bin"];
+        // Override it with what is in the Developer directory's /usr/bin.
+        // TODO: Should really use xcode-select -print-path as the starting point.
+        [map addEntriesFromDictionary:[[self class] collectVersionsInFolder:@"/Developer/usr/bin"]];
+        NSFileManager *fm = [NSFileManager defaultManager];
+        BOOL isDir        = NO;
+        if ([fm fileExistsAtPath:@"/Applications/Xcode.app" isDirectory:&isDir]
+            && isDir)
+        {
+            [map addEntriesFromDictionary:
+             [[self class] collectVersionsInFolder:@"/Applications/Xcode.app/Contents/Developer/usr/bin"]];
         }
-        fclose(aFile);
-      }
+        _versionMap = [map copy];
     }
-  }
-  return result;
+    return self;
 }
 
-- (NSString*)gcovForGCovFile:(NSString*)path {
-  NSString *version = [self versionFromGCovFile:path];
-  NSString *result = [_versionMap objectForKey:version];
-  if (!result) {
-    result = [self defaultGCovPath];
-  }
-  return result;
+
+- (NSString *)defaultGCovPath
+{
+    return [_versionMap objectForKey:@""];
 }
 
-+ (NSMutableDictionary*)collectVersionsInFolder:(NSString *)path {
-  NSMutableDictionary *result = [NSMutableDictionary dictionary];
-  // http://developer.apple.com/mac/library/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/Reference/Reference.html#//apple_ref/occ/clm/NSFileManager/defaultManager
-  // This is run on a thread, so don't use -defaultManager so we get something
-  // thread safe.
-  NSFileManager *fm = [[[NSFileManager alloc] init] autorelease];
-  NSDirectoryEnumerator *enumerator = [fm enumeratorAtPath:path];
-  // ...filter to gcov* apps...
-  NSEnumerator *enumerator2 =
+- (NSArray *)installedVersions
+{
+    return [_versionMap allValues];
+}
+
+- (NSString *)versionFromGCovFile:(NSString *)path
+{
+    NSString *result = nil;
+    
+    uint32 GCDA_HEADER              = 'gcda';
+    uint32 GCDA_HEADER_WRONG_ENDIAN = 'adcg';
+    uint32 GCNO_HEADER              = 'gcno';
+    uint32 GCNO_HEADER_WRONG_ENDIAN = 'oncg';
+    
+    // Read in the file header and version number.
+    if ([path length])
+    {
+        const char *cPath = [path fileSystemRepresentation];
+        if (cPath)
+        {
+            FILE *aFile = fopen(cPath, "r");
+            if (aFile)
+            {
+                uint32 buffer[2];
+                if (fread(buffer, sizeof(uint32), 2, aFile) == 2)
+                {
+                    // Check the header.
+                    if ((buffer[0] == GCDA_HEADER) ||
+                        (buffer[0] == GCDA_HEADER_WRONG_ENDIAN) ||
+                        (buffer[0] == GCNO_HEADER) ||
+                        (buffer[0] == GCNO_HEADER_WRONG_ENDIAN))
+                    {
+                        uint32 ver = buffer[1];
+                        BOOL flip  = ((buffer[0] == GCDA_HEADER_WRONG_ENDIAN) ||
+                                      (buffer[0] == GCNO_HEADER_WRONG_ENDIAN));
+                        if (flip)
+                        {
+                            ver =
+                            ((ver & 0xff000000) >> 24) |
+                            ((ver & 0x00ff0000) >>  8) |
+                            ((ver & 0x0000ff00) <<  8) |
+                            ((ver & 0x000000ff) << 24);
+                        }
+                        
+                        uint32 major    = ((ver & 0xff000000) >> 24) - '0';
+                        uint32 minor10s = ((ver & 0x00ff0000) >> 16) - '0';
+                        uint32 minor1s  = ((ver & 0x0000ff00) >> 8) - '0';
+                        uint32 minor    = minor10s * 10 + minor1s;
+                        result = [NSString stringWithFormat:@"%u.%u", major, minor];
+                    }
+                }
+                fclose(aFile);
+            }
+        }
+    }
+    return result;
+}
+
+- (NSString *)gcovForGCovFile:(NSString *)path
+{
+    NSString *version = [self versionFromGCovFile:path];
+    NSString *result  = [_versionMap objectForKey:version];
+    if (!result)
+    {
+        result = [self defaultGCovPath];
+    }
+    return result;
+}
+
++ (NSMutableDictionary *)collectVersionsInFolder:(NSString *)path
+{
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    // http://developer.apple.com/mac/library/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/Reference/Reference.html#//apple_ref/occ/clm/NSFileManager/defaultManager
+    // This is run on a thread, so don't use -defaultManager so we get something
+    // thread safe.
+    NSFileManager *fm                 = [[NSFileManager alloc] init];
+    NSDirectoryEnumerator *enumerator = [fm enumeratorAtPath:path];
+    // ...filter to gcov* apps...
+    NSEnumerator *enumerator2 =
     [enumerator gtm_filteredEnumeratorByMakingEachObjectPerformSelector:@selector(hasPrefix:)
                                                              withObject:@"gcov"];
-  // ...turn them all into full paths...
-  NSEnumerator *enumerator3 =
+    // ...turn them all into full paths...
+    NSEnumerator *enumerator3 =
     [enumerator2 gtm_enumeratorByTarget:path
                   performOnEachSelector:@selector(stringByAppendingPathComponent:)];
-  // ...walk over them validating they are good to use.
-  for (NSString *gcovPath in enumerator3) {
-    // Must be executable.
-    if (![fm isExecutableFileAtPath:gcovPath]) {
-      continue;
+    // ...walk over them validating they are good to use.
+    for (NSString *gcovPath in enumerator3)
+    {
+        // Must be executable.
+        if (![fm isExecutableFileAtPath:gcovPath])
+        {
+            continue;
+        }
+        
+        // Extract the version.
+        NSString *name    = [gcovPath lastPathComponent];
+        NSString *version = nil;
+        if ([name isEqual:@"gcov"])
+        {
+            // It's the default
+            version = @"";
+        }
+        else
+        {
+            NSString *remainder = [name substringFromIndex:4];
+            if ([remainder characterAtIndex:0] != '-')
+            {
+                NSLog(@"gcov binary name in odd format: %@", gcovPath);
+            }
+            else
+            {
+                version = [remainder substringFromIndex:1];
+            }
+        }
+        
+        if (version)
+        {
+            [result setObject:gcovPath forKey:version];
+        }
     }
-
-    // Extract the version.
-    NSString *name = [gcovPath lastPathComponent];
-    NSString *version = nil;
-    if ([name isEqual:@"gcov"]) {
-      // It's the default
-      version = @"";
-    } else {
-      NSString *remainder = [name substringFromIndex:4];
-      if ([remainder characterAtIndex:0] != '-') {
-        NSLog(@"gcov binary name in odd format: %@", gcovPath);
-      } else {
-        version = [remainder substringFromIndex:1];
-      }
-    }
-
-    if (version) {
-      [result setObject:gcovPath forKey:version];
-    }
-  }
-
-  return result;
+    
+    return result;
 }
 
 @end
