@@ -32,22 +32,22 @@ GTMOBJECT_SINGLETON_BOILERPLATE(GCovVersionManager, defaultManager);
       [map addEntriesFromDictionary:
        [[self class] collectVersionsInFolder:@"/Applications/Xcode.app/Contents/Developer/usr/bin"]];
     }
-    versionMap_ = [map copy];
+    _versionMap = [map copy];
   }
   return self;
 }
 
 - (void) dealloc {
-  [versionMap_ release];
+  [_versionMap release];
   [super dealloc];
 }
 
 - (NSString*)defaultGCovPath {
-  return [versionMap_ objectForKey:@""];
+  return [_versionMap objectForKey:@""];
 }
 
 - (NSArray*)installedVersions {
-  return [versionMap_ allValues];
+  return [_versionMap allValues];
 }
 
 - (NSString*)versionFromGCovFile:(NSString*)path {
@@ -98,7 +98,7 @@ GTMOBJECT_SINGLETON_BOILERPLATE(GCovVersionManager, defaultManager);
 
 - (NSString*)gcovForGCovFile:(NSString*)path {
   NSString *version = [self versionFromGCovFile:path];
-  NSString *result = [versionMap_ objectForKey:version];
+  NSString *result = [_versionMap objectForKey:version];
   if (!result) {
     result = [self defaultGCovPath];
   }

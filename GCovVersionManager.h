@@ -21,8 +21,8 @@
 
 
 @interface GCovVersionManager : NSObject {
- @private
-  NSDictionary *versionMap_;
+@private
+    NSDictionary *_versionMap;
 }
 
 + (GCovVersionManager*)defaultManager;
