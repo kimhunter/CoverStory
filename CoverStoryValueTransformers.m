@@ -19,109 +19,130 @@
 
 @implementation CoverageLineDataToHitCountTransformer
 
-+ (Class)transformedValueClass {
-  return [NSAttributedString class];
++ (Class)transformedValueClass
+{
+    return [NSAttributedString class];
 }
 
-+ (BOOL)allowsReverseTransformation {
-  return NO;
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
 }
 
-- (id)transformedValue:(id)value {
-  NSAssert([value isKindOfClass:[CoverStoryCoverageLineData class]], 
-           @"Only handle CoverStoryCoverageLineData");
-  CoverStoryCoverageLineData *data = (CoverStoryCoverageLineData*)value;
-  // Draw the hitcount
-  NSInteger count = [data hitCount];
-
-  NSString *displayString = @"";
-  NSDictionary *attributes = nil;
-  if (count != kCoverStoryNotExecutedMarker) {
-    NSMutableParagraphStyle *pStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [pStyle setAlignment:NSRightTextAlignment];
-    [pStyle setMinimumLineHeight:13];
-    NSColor *color = nil;
+- (id)transformedValue:(id)value
+{
+    NSAssert([value isKindOfClass:[CoverStoryCoverageLineData class]], @"Only handle CoverStoryCoverageLineData");
+    CoverStoryCoverageLineData *data = (CoverStoryCoverageLineData *)value;
+    // Draw the hitcount
+    NSInteger count = [data hitCount];
     
-    if (count == 0) {
-      color = [NSColor redColor];
-    } else {
-      color = [NSColor colorWithDeviceWhite:0.4 alpha:1.0];
+    NSString *displayString  = @"";
+    NSDictionary *attributes = nil;
+    if (count != kCoverStoryNotExecutedMarker)
+    {
+        NSMutableParagraphStyle *pStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [pStyle setAlignment:NSRightTextAlignment];
+        [pStyle setMinimumLineHeight:13];
+        NSColor *color = nil;
+        
+        if (count == 0)
+        {
+            color = [NSColor redColor];
+        }
+        else
+        {
+            color = [NSColor colorWithDeviceWhite:0.4 alpha:1.0];
+        }
+        
+        attributes = @ {NSParagraphStyleAttributeName : pStyle,
+                        NSForegroundColorAttributeName : color};
+        
+        if (count == kCoverStoryNonFeasibleMarker)
+        {
+            displayString = @"--"; // for non-feasible lines
+        }
+        else if (count < 999)
+        {
+            displayString = [NSString stringWithFormat:@"%ld", (long)count];
+        }
+        else
+        {
+            displayString = @"99+";
+        }
     }
-    
-    attributes = @{NSParagraphStyleAttributeName: pStyle,
-                    NSForegroundColorAttributeName: color};
-    
-    if (count == kCoverStoryNonFeasibleMarker) {
-      displayString = @"--"; // for non-feasible lines
-    } else if (count < 999) {
-      displayString = [NSString stringWithFormat:@"%ld", (long)count];
-    } else {
-      displayString = @"99+";
-    }
-  }
-  return [[NSAttributedString alloc] initWithString:displayString
-                                          attributes:attributes];
+    return [[NSAttributedString alloc] initWithString:displayString attributes:attributes];
 }
 
 @end
 
 @implementation CoverageLineDataToSourceLineTransformer
 
-+ (void)registerDefaults {
++ (void)registerDefaults
+{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *lineTransformerDefaults = @{
-        kCoverStoryMissedLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor redColor]],
-        kCoverStoryUnexecutableLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
-        kCoverStoryNonFeasibleLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
-        kCoverStoryExecutedLineColorKey: [NSArchiver archivedDataWithRootObject:[NSColor blackColor]]
+        kCoverStoryMissedLineColorKey:[NSArchiver archivedDataWithRootObject:[NSColor redColor]],
+        kCoverStoryUnexecutableLineColorKey:[NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
+        kCoverStoryNonFeasibleLineColorKey:[NSArchiver archivedDataWithRootObject:[NSColor grayColor]],
+        kCoverStoryExecutedLineColorKey:[NSArchiver archivedDataWithRootObject:[NSColor blackColor]]
     };
-  
-  [defaults registerDefaults:lineTransformerDefaults];
+    
+    [defaults registerDefaults:lineTransformerDefaults];
 }
 
-+ (Class)transformedValueClass {
-  return [NSAttributedString class];
++ (Class)transformedValueClass
+{
+    return [NSAttributedString class];
 }
 
-+ (BOOL)allowsReverseTransformation {
-  return NO;
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
 }
 
-- (NSColor *)defaultColorNamed:(NSString*)name {
-  NSColor *color = nil;
-  if (name) {
-    NSUserDefaultsController *defaults
-      = [NSUserDefaultsController sharedUserDefaultsController];
-    id values = [defaults values];
-    NSData *colorData = [values valueForKey:name];
-    if (colorData) {
-      color = (NSColor *)[NSUnarchiver unarchiveObjectWithData:colorData];
+- (NSColor *)defaultColorNamed:(NSString *)name
+{
+    NSColor *color = nil;
+    if (name)
+    {
+        NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
+        id values = [defaults values];
+        NSData *colorData = [values valueForKey:name];
+        if (colorData)
+        {
+            color = (NSColor *)[NSUnarchiver unarchiveObjectWithData:colorData];
+        }
     }
-  }
-  return color;
+    return color;
 }
 
-- (id)transformedValue:(id)value {
-  NSAssert([value isKindOfClass:[CoverStoryCoverageLineData class]], 
-           @"Only handle CoverStoryCoverageLineData");
-  CoverStoryCoverageLineData *data = (CoverStoryCoverageLineData*)value;
-  NSString *line = [data line];
-  NSInteger hitCount = [data hitCount];
-  NSString *colorName = nil;
-  if (hitCount == 0) {
-    colorName = kCoverStoryMissedLineColorKey;
-  } else if (hitCount == kCoverStoryNotExecutedMarker) {
-    colorName = kCoverStoryUnexecutableLineColorKey;
-  } else if (hitCount == kCoverStoryNonFeasibleMarker) {
-    colorName = kCoverStoryNonFeasibleLineColorKey;
-  }
-  else {
-    colorName = kCoverStoryExecutedLineColorKey;
-  }
-  NSColor *textColor = [self defaultColorNamed:colorName];
-  NSDictionary *attributes = @{NSForegroundColorAttributeName: textColor};
-  return [[NSAttributedString alloc] initWithString:line
-                                         attributes:attributes];
+- (id)transformedValue:(id)value
+{
+    NSAssert([value isKindOfClass:[CoverStoryCoverageLineData class]], @"Only handle CoverStoryCoverageLineData");
+    CoverStoryCoverageLineData *data = (CoverStoryCoverageLineData *)value;
+    NSString *line = [data line];
+    NSInteger hitCount = [data hitCount];
+    NSString *colorName = nil;
+    
+    if (hitCount == 0)
+    {
+        colorName = kCoverStoryMissedLineColorKey;
+    }
+    else if (hitCount == kCoverStoryNotExecutedMarker)
+    {
+        colorName = kCoverStoryUnexecutableLineColorKey;
+    }
+    else if (hitCount == kCoverStoryNonFeasibleMarker)
+    {
+        colorName = kCoverStoryNonFeasibleLineColorKey;
+    }
+    else
+    {
+        colorName = kCoverStoryExecutedLineColorKey;
+    }
+    NSColor *textColor       = [self defaultColorNamed:colorName];
+    NSDictionary *attributes = @ {NSForegroundColorAttributeName : textColor};
+    return [[NSAttributedString alloc] initWithString:line attributes:attributes];
 }
 
 @end
@@ -133,29 +154,33 @@
 
 @implementation CoverageFileDataToSourcePathTransformer
 
-+ (Class)transformedValueClass {
-  return [NSString class];
++ (Class)transformedValueClass
+{
+    return [NSString class];
 }
 
-+ (BOOL)allowsReverseTransformation {
-  return NO;
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
 }
 
-- (id)transformedValue:(id)value {
-  NSAssert([value isKindOfClass:[CoverStoryCoverageFileData class]], 
-           @"Only handle CoverStoryCoverageFileData");
-  CoverStoryCoverageFileData *data = (CoverStoryCoverageFileData *)value;
-  NSString *sourcePath = [data sourcePath];
-  CoverStoryDocument *owningDoc = [data document];
-  NSString *commonPrefix = nil;
-  if (owningDoc) {
-    commonPrefix = [owningDoc commonPathPrefix];
-  }
-  NSUInteger commonPrefixLength = [commonPrefix length];
-  if (commonPrefixLength > 0) {
-    return [sourcePath substringFromIndex:commonPrefixLength];
-  }
-  return [sourcePath stringByAbbreviatingWithTildeInPath];
+- (id)transformedValue:(id)value
+{
+    NSAssert([value isKindOfClass:[CoverStoryCoverageFileData class]], @"Only handle CoverStoryCoverageFileData");
+    CoverStoryCoverageFileData *data = (CoverStoryCoverageFileData *)value;
+    NSString *sourcePath             = [data sourcePath];
+    CoverStoryDocument *owningDoc    = [data document];
+    NSString *commonPrefix           = nil;
+    if (owningDoc)
+    {
+        commonPrefix = [owningDoc commonPathPrefix];
+    }
+    NSUInteger commonPrefixLength = [commonPrefix length];
+    if (commonPrefixLength > 0)
+    {
+        return [sourcePath substringFromIndex:commonPrefixLength];
+    }
+    return [sourcePath stringByAbbreviatingWithTildeInPath];
 }
 
 @end
@@ -167,96 +192,109 @@
 
 @implementation CoverageFileDataToCoveragePercentageTransformer
 
-const float kBadCoverage = 25.0f;
+const float kBadCoverage  = 25.0f;
 const float kGoodCoverage = 75.0f;
 
-+ (Class)transformedValueClass {
-  return [NSAttributedString class];
++ (Class)transformedValueClass
+{
+    return [NSAttributedString class];
 }
 
-+ (BOOL)allowsReverseTransformation {
-  return NO;
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
 }
 
-- (id)transformedValue:(id)value {
-  NSAssert([value isKindOfClass:[CoverStoryCoverageFileData class]], 
-           @"Only handle CoverStoryCoverageFileData");
-  CoverStoryCoverageFileData *data = (CoverStoryCoverageFileData *)value;
-  float coverage = 0.0f;
-  NSString *coverageString = nil;
-  [data coverageTotalLines:NULL
-                 codeLines:NULL
-              hitCodeLines:NULL
-          nonFeasibleLines:NULL
-            coverageString:&coverageString
-                  coverage:&coverage];
-  float redHue = 0;
-  float greenHue = 120.0f/360.0f;
-  float hue = 0;
-  float saturation = 1.0f;
-  float brightness = 0.75f;
-  if (coverage < kBadCoverage) {
-    hue = redHue;
-  } else if (coverage < kGoodCoverage) {
-    hue = redHue + (greenHue * (coverage - kBadCoverage) / (kGoodCoverage - kBadCoverage));
-  } else {
-    hue = greenHue;
-  }
-  NSColor *textColor = [NSColor colorWithCalibratedHue:hue
-                                            saturation:saturation
-                                            brightness:brightness
-                                                 alpha:1.0];
-  NSDictionary *attributes = @{NSForegroundColorAttributeName: textColor};
-  return [[NSAttributedString alloc] initWithString:coverageString
-                                          attributes:attributes];
+- (id)transformedValue:(id)value
+{
+    NSAssert([value isKindOfClass:[CoverStoryCoverageFileData class]],
+             @"Only handle CoverStoryCoverageFileData");
+    CoverStoryCoverageFileData *data = (CoverStoryCoverageFileData *)value;
+    float coverage = 0.0f;
+    NSString *coverageString = nil;
+    [data coverageTotalLines:NULL
+                   codeLines:NULL
+                hitCodeLines:NULL
+            nonFeasibleLines:NULL
+              coverageString:&coverageString
+                    coverage:&coverage];
+    float redHue     = 0;
+    float greenHue   = 120.0f / 360.0f;
+    float hue        = 0;
+    float saturation = 1.0f;
+    float brightness = 0.75f;
+    if (coverage < kBadCoverage)
+    {
+        hue = redHue;
+    }
+    else if (coverage < kGoodCoverage)
+    {
+        hue = redHue + (greenHue * (coverage - kBadCoverage) / (kGoodCoverage - kBadCoverage));
+    }
+    else
+    {
+        hue = greenHue;
+    }
+    NSColor *textColor = [NSColor colorWithCalibratedHue:hue
+                                              saturation:saturation
+                                              brightness:brightness
+                                                   alpha:1.0];
+    NSDictionary *attributes = @ {NSForegroundColorAttributeName : textColor};
+    return [[NSAttributedString alloc] initWithString:coverageString
+                                           attributes:attributes];
 }
 
 @end
 
 @implementation FileLineCoverageToCoverageSummaryTransformer
 
-+ (Class)transformedValueClass {
-  return [NSString class];
++ (Class)transformedValueClass
+{
+    return [NSString class];
 }
 
-+ (BOOL)allowsReverseTransformation {
-  return NO;
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
 }
 
-- (id)transformedValue:(id)value {
-  NSAssert([value conformsToProtocol:@protocol(CoverStoryLineCoverageProtocol)], 
-           @"Only handle CoverStoryLineCoverageProtocol");
-  id<CoverStoryLineCoverageProtocol> data = (id<CoverStoryLineCoverageProtocol>)value;
-  NSInteger totalLines = 0;
-  NSInteger codeLines = 0;
-  NSInteger hitLines = 0;
-  NSInteger nonfeasible = 0;
-  NSString *coverage = nil;
-  [data coverageTotalLines:&totalLines
-                 codeLines:&codeLines
-              hitCodeLines:&hitLines
-          nonFeasibleLines:&nonfeasible
-            coverageString:&coverage
-                  coverage:NULL];
-  
-  NSString *statString = nil;
-  if (nonfeasible) {
-    statString = [NSString stringWithFormat:
-                  @"Executed %@%% of %ld lines (%ld executed, %ld executable, "
-                  "%ld non-feasible, %ld total lines)", coverage,
-                  (long)codeLines, (long)hitLines, (long)codeLines,
-                  (long)nonfeasible, (long)totalLines];
-  } else {
-    statString = [NSString stringWithFormat:
-                  @"Executed %@%% of %ld lines (%ld executed, %ld executable, "
-                  "%ld total lines)", coverage, (long)codeLines, (long)hitLines,
-                  (long)codeLines, (long)totalLines];
-  }
-  return statString;
+- (id)transformedValue:(id)value
+{
+    NSAssert([value conformsToProtocol:@protocol(CoverStoryLineCoverageProtocol)], @"Only handle CoverStoryLineCoverageProtocol");
+    id<CoverStoryLineCoverageProtocol> data = (id<CoverStoryLineCoverageProtocol>)value;
+    NSInteger totalLines                    = 0;
+    NSInteger codeLines                     = 0;
+    NSInteger hitLines                      = 0;
+    NSInteger nonfeasible                   = 0;
+    NSString *coverage                      = nil;
+    [data coverageTotalLines:&totalLines
+                   codeLines:&codeLines
+                hitCodeLines:&hitLines
+            nonFeasibleLines:&nonfeasible
+              coverageString:&coverage
+                    coverage:NULL];
+    
+    NSString *statString = nil;
+    if (nonfeasible)
+    {
+        statString = [NSString stringWithFormat:
+                      @"Executed %@%% of %ld lines (%ld executed, %ld executable, "
+                      "%ld non-feasible, %ld total lines)", coverage,
+                      (long)codeLines, (long)hitLines, (long)codeLines,
+                      (long)nonfeasible, (long)totalLines];
+    }
+    else
+    {
+        statString = [NSString stringWithFormat:
+                      @"Executed %@%% of %ld lines (%ld executed, %ld executable, "
+                      "%ld total lines)", coverage, (long)codeLines, (long)hitLines,
+                      (long)codeLines, (long)totalLines];
+    }
+    return statString;
 }
 
 @end
-  
+
 // Transformer for changing line coverage to summaries.
 // Used for tooltip
 @interface LineCoverageToCoverageSummaryTransformer : NSValueTransformer
@@ -264,75 +302,87 @@ const float kGoodCoverage = 75.0f;
 
 @implementation LineCoverageToCoverageSummaryTransformer
 
-+ (Class)transformedValueClass {
-  return [NSString class];
++ (Class)transformedValueClass
+{
+    return [NSString class];
 }
 
-+ (BOOL)allowsReverseTransformation {
-  return NO;
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
 }
 
-- (id)transformedValue:(id)value {
-  if (!value) return @"";
-  NSAssert1([value respondsToSelector:@selector(objectEnumerator)],
-           @"Only handle collections : %@", value);
-  NSEnumerator *arrayEnum = [value objectEnumerator];
-  NSInteger sources = [value count];
-  NSInteger totalLines = 0;
-  NSInteger codeLines = 0;
-  NSInteger hitLines = 0;
-  NSInteger nonfeasible = 0;
-  NSString *coverage = nil;
-  [arrayEnum coverageTotalLines:&totalLines
-                      codeLines:&codeLines
-                   hitCodeLines:&hitLines
-               nonFeasibleLines:&nonfeasible
-                 coverageString:&coverage
-                       coverage:NULL];
-  NSString *statString = nil;
-  if (nonfeasible) {
-    statString = [NSString stringWithFormat:
-                  @"Executed %@%% of %ld lines (%ld sources, %ld executed, "
-                  "%ld executable, %ld non-feasible, %ld total lines)",
-                  coverage, (long)codeLines, (long)sources, (long)hitLines,
-                  (long)codeLines, (long)nonfeasible, (long)totalLines];
-  } else {
-    statString = [NSString stringWithFormat:
-                  @"Executed %@%% of %ld lines (%ld sources, %ld executed, "
-                  "%ld executable, %ld total lines)", coverage, (long)codeLines,
-                  (long)sources, (long)hitLines, (long)codeLines,
-                  (long)totalLines];
-  }
-  return statString;
+- (id)transformedValue:(id)value
+{
+    if (!value)
+        return @"";
+    NSAssert1([value respondsToSelector:@selector(objectEnumerator)],
+              @"Only handle collections : %@", value);
+    NSEnumerator *arrayEnum = [value objectEnumerator];
+    NSInteger sources       = [value count];
+    NSInteger totalLines    = 0;
+    NSInteger codeLines     = 0;
+    NSInteger hitLines      = 0;
+    NSInteger nonfeasible   = 0;
+    NSString *coverage      = nil;
+    [arrayEnum coverageTotalLines:&totalLines
+                        codeLines:&codeLines
+                     hitCodeLines:&hitLines
+                 nonFeasibleLines:&nonfeasible
+                   coverageString:&coverage
+                         coverage:NULL];
+    NSString *statString = nil;
+    if (nonfeasible)
+    {
+        statString = [NSString stringWithFormat:
+                      @"Executed %@%% of %ld lines (%ld sources, %ld executed, "
+                      "%ld executable, %ld non-feasible, %ld total lines)",
+                      coverage, (long)codeLines, (long)sources, (long)hitLines,
+                      (long)codeLines, (long)nonfeasible, (long)totalLines];
+    }
+    else
+    {
+        statString = [NSString stringWithFormat:
+                      @"Executed %@%% of %ld lines (%ld sources, %ld executed, "
+                      "%ld executable, %ld total lines)", coverage, (long)codeLines,
+                      (long)sources, (long)hitLines, (long)codeLines,
+                      (long)totalLines];
+    }
+    return statString;
 }
 
 @end
 
 @implementation LineCoverageToCoverageShortSummaryTransformer
 
-+ (Class)transformedValueClass {
-  return [NSString class];
++ (Class)transformedValueClass
+{
+    return [NSString class];
 }
 
-+ (BOOL)allowsReverseTransformation {
-  return NO;
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
 }
 
-- (id)transformedValue:(id)value {
-  if (!value) return @"";
-  NSAssert1([value respondsToSelector:@selector(objectEnumerator)],
-            @"Only handle collections : %@", value);
-  NSEnumerator *arrayEnum = [value objectEnumerator];
-  NSInteger codeLines = 0;
-  NSString *coverage = nil;
-  [arrayEnum coverageTotalLines:NULL
-                      codeLines:&codeLines
-                   hitCodeLines:NULL
-               nonFeasibleLines:NULL
-                 coverageString:&coverage
-                       coverage:NULL];
-  return [NSString stringWithFormat:@"%@%% of %ld lines",
-          coverage, (long)codeLines];
+- (id)transformedValue:(id)value
+{
+    if (!value)
+    {
+        return @"";
+    }
+    NSAssert1([value respondsToSelector:@selector(objectEnumerator)], @"Only handle collections : %@", value);
+    NSEnumerator *arrayEnum = [value objectEnumerator];
+    NSInteger codeLines = 0;
+    NSString *coverage = nil;
+
+    [arrayEnum coverageTotalLines:NULL
+                        codeLines:&codeLines
+                     hitCodeLines:NULL
+                 nonFeasibleLines:NULL
+                   coverageString:&coverage
+                         coverage:NULL];
+    return [NSString stringWithFormat:@"%@%% of %ld lines", coverage, (long)codeLines];
 }
 
 @end
