@@ -54,7 +54,7 @@
             color = [NSColor colorWithDeviceWhite:0.4 alpha:1.0];
         }
         
-        attributes = @ {NSParagraphStyleAttributeName : pStyle,
+        attributes = @{NSParagraphStyleAttributeName : pStyle,
                         NSForegroundColorAttributeName : color};
         
         if (count == kCoverStoryNonFeasibleMarker)
@@ -141,7 +141,7 @@
         colorName = kCoverStoryExecutedLineColorKey;
     }
     NSColor *textColor       = [self defaultColorNamed:colorName];
-    NSDictionary *attributes = @ {NSForegroundColorAttributeName : textColor};
+    NSDictionary *attributes = @{NSForegroundColorAttributeName : textColor};
     return [[NSAttributedString alloc] initWithString:line attributes:attributes];
 }
 
@@ -239,7 +239,7 @@ const float kGoodCoverage = 75.0f;
                                               saturation:saturation
                                               brightness:brightness
                                                    alpha:1.0];
-    NSDictionary *attributes = @ {NSForegroundColorAttributeName : textColor};
+    NSDictionary *attributes = @{NSForegroundColorAttributeName : textColor};
     return [[NSAttributedString alloc] initWithString:coverageString
                                            attributes:attributes];
 }
