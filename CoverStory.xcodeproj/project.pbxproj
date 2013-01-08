@@ -35,7 +35,6 @@
 /* End PBXAppleScriptBuildPhase section */
 
 /* Begin PBXBuildFile section */
-		3B725E77169BFC75000D2FFD /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B725E76169BFC75000D2FFD /* Sparkle.framework */; };
 		63BC85EC0B4D863400CDC9E5 /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 63BC85EA0B4D863400CDC9E5 /* main.css */; };
 		8B2A9C6D0D84F84600599386 /* gcov.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8B2A9C6A0D84F84600599386 /* gcov.icns */; };
 		8B2A9C6E0D84F84600599386 /* gcno.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8B2A9C6B0D84F84600599386 /* gcno.icns */; };
@@ -153,7 +152,6 @@
 		2A37F4AEFDCFA73011CA2CEA /* CoverStoryDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
-		3B725E76169BFC75000D2FFD /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = external/Sparkle.framework; sourceTree = "<group>"; };
 		63BC85EA0B4D863400CDC9E5 /* main.css */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = main.css; sourceTree = "<group>"; };
 		8B198D2F0C7DF72D002E4E3F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		8B2A9C6A0D84F84600599386 /* gcov.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gcov.icns; sourceTree = "<group>"; };
@@ -263,7 +261,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B725E77169BFC75000D2FFD /* Sparkle.framework in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				8BFE723D0B46FE3400A3C7DD /* Carbon.framework in Frameworks */,
 			);
@@ -302,7 +299,6 @@
 		2A37F4AAFDCFA73011CA2CEA /* Gcover */ = {
 			isa = PBXGroup;
 			children = (
-				3B725E76169BFC75000D2FFD /* Sparkle.framework */,
 				8B198D2F0C7DF72D002E4E3F /* COPYING */,
 				8B67DF8211B96380000DB052 /* BuildScripts */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
