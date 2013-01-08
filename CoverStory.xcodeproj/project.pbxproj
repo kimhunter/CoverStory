@@ -313,6 +313,7 @@
 			comments = "Copyright 2006-2007 Google Inc.\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not\nuse this file except in compliance with the License.  You may obtain a copy\nof the License at\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT\nWARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the\nLicense for the specific language governing permissions and limitations under\nthe License.\n";
 			name = Gcover;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
