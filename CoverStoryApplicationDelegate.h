@@ -19,5 +19,5 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CoverStoryApplicationDelegate : NSObject
+@interface CoverStoryApplicationDelegate : NSObject<NSApplicationDelegate>
 @end

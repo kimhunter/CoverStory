@@ -41,6 +41,16 @@
   return NO;
 }
 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)visibleWindows
+{
+    if(!visibleWindows)
+    {
+        [[CoverStoryDocumentController sharedDocumentController] openDocument:self];
+        return NO;
+    }
+    return YES;
+}
+
 - (NSColor *)colorForKey:(NSString *)key {
   NSUserDefaultsController *defaults
     = [NSUserDefaultsController sharedUserDefaultsController];
