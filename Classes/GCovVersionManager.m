@@ -29,11 +29,9 @@ GTMOBJECT_SINGLETON_BOILERPLATE(GCovVersionManager, defaultManager);
         [map addEntriesFromDictionary:[[self class] collectVersionsInFolder:@"/Developer/usr/bin"]];
         NSFileManager *fm = [NSFileManager defaultManager];
         BOOL isDir        = NO;
-        if ([fm fileExistsAtPath:@"/Applications/Xcode.app" isDirectory:&isDir]
-            && isDir)
+        if ([fm fileExistsAtPath:@"/Applications/Xcode.app" isDirectory:&isDir] && isDir)
         {
-            [map addEntriesFromDictionary:
-             [[self class] collectVersionsInFolder:@"/Applications/Xcode.app/Contents/Developer/usr/bin"]];
+            [map addEntriesFromDictionary:[[self class] collectVersionsInFolder:@"/Applications/Xcode.app/Contents/Developer/usr/bin"]];
         }
         _versionMap = [map copy];
     }

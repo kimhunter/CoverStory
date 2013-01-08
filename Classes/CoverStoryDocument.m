@@ -328,33 +328,26 @@ typedef NS_ENUM(NSInteger, CSMessageType)
         NSFileManager *fm                 = [NSFileManager threadSafeManager];
         NSDirectoryEnumerator *enumerator = [fm enumeratorAtPath:path];
         // ...filter to .gcda files...
-        NSEnumerator *enumerator2 =
-        [enumerator gtm_filteredEnumeratorByMakingEachObjectPerformSelector:@selector(hasSuffix:)
+        NSEnumerator *enumerator2 = [enumerator gtm_filteredEnumeratorByMakingEachObjectPerformSelector:@selector(hasSuffix:)
                                                                  withObject:@".gcda"];
         // ...turn them all into full paths...
-        NSEnumerator *enumerator3 =
-        [enumerator2 gtm_enumeratorByTarget:path
-                      performOnEachSelector:@selector(stringByAppendingPathComponent:)];
+        NSEnumerator *enumerator3 = [enumerator2 gtm_enumeratorByTarget:path performOnEachSelector:@selector(stringByAppendingPathComponent:)];
         // .. and collect them all.
+
         NSArray *allFilePaths = [enumerator3 allObjects];
         NSUInteger pathCount  = [allFilePaths count];
         if (pathCount == 0)
         {
-            [self addMessageFromThread:@"Found no gcda files to process."
-                           messageType:kCSMessageTypeWarning];
+            [self addMessageFromThread:@"Found no gcda files to process." messageType:kCSMessageTypeWarning];
         }
         else if (pathCount == 1)
         {
-            [self addMessageFromThread:@"Found 1 gcda file to process."
-                           messageType:kCSMessageTypeInfo];
+            [self addMessageFromThread:@"Found 1 gcda file to process." messageType:kCSMessageTypeInfo];
         }
         else
         {
-            NSString *message =
-            [NSString stringWithFormat:@"Found %lu gcda files to process.",
-             (unsigned long)pathCount];
-            [self addMessageFromThread:message
-                           messageType:kCSMessageTypeInfo];
+            NSString *message = [NSString stringWithFormat:@"Found %lu gcda files to process.", (unsigned long)pathCount];
+            [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
         }
         
         // we want to batch process them by chunks w/in a given directory.  so sort
@@ -362,6 +355,7 @@ typedef NS_ENUM(NSInteger, CSMessageType)
         allFilePaths = [allFilePaths sortedArrayUsingSelector:@selector(compare:)];
         NSEnumerator *pathEnum = [allFilePaths objectEnumerator];
         NSString *filename;
+
         if ((filename = [pathEnum nextObject]))
         {
             // seed our collecting w/ the first item
@@ -385,11 +379,8 @@ typedef NS_ENUM(NSInteger, CSMessageType)
                     if (![self processCoverageForFiles:currentFileList
                                               inFolder:currentFolder])
                     {
-                        NSString *message =
-                        [NSString stringWithFormat:@"failed to process files: %@",
-                         currentFileList];
-                        [self addMessageFromThread:message path:currentFolder
-                                       messageType:kCSMessageTypeError];
+                        NSString *message = [NSString stringWithFormat:@"failed to process files: %@", currentFileList];
+                        [self addMessageFromThread:message path:currentFolder  messageType:kCSMessageTypeError];
                     }
                     // restart the collecting w/ this filename
                     currentFolder = [filename stringByDeletingLastPathComponent];
@@ -404,15 +395,10 @@ typedef NS_ENUM(NSInteger, CSMessageType)
                 }
             }
             // process whatever what we were collecting when we hit the end
-            if (![self processCoverageForFiles:currentFileList
-                                      inFolder:currentFolder])
+            if (![self processCoverageForFiles:currentFileList inFolder:currentFolder])
             {
-                NSString *message =
-                [NSString stringWithFormat:@"failed to process files: %@",
-                 currentFileList];
-                [self addMessageFromThread:message
-                                      path:currentFolder
-                               messageType:kCSMessageTypeError];
+                NSString *message = [NSString stringWithFormat:@"failed to process files: %@", currentFileList];
+                [self addMessageFromThread:message path:currentFolder messageType:kCSMessageTypeError];
             }
         }
     }
@@ -449,20 +435,20 @@ typedef NS_ENUM(NSInteger, CSMessageType)
 
 - (void)cleanupTempDir:(NSString *)tempDir
 {
-    @try {
-        // nuke our temp dir tree
-        NSFileManager *fm = [NSFileManager threadSafeManager];
-        if (![fm removeItemAtPath:tempDir error:nil])
-        {
-            [self addMessageFromThread:@"failed to remove our tempdir"
-                                  path:tempDir
-                           messageType:kCSMessageTypeError];
-        }
+    NSError *error = nil;
+    // nuke our temp dir tree
+    
+    NSFileManager *fm = [NSFileManager threadSafeManager];
+    
+    if (![fm removeItemAtPath:tempDir error:&error])
+    {
+        [self addMessageFromThread:@"failed to remove our tempdir" path:tempDir messageType:kCSMessageTypeError];
     }
-    @catch (NSException *e) {
-        NSString *msg
-        = [NSString stringWithFormat:@"Internal error trying to cleanup tempdir (%@ - %@).",
-           [e name], [e reason]];
+    if (error != nil)
+    {
+        NSString *msg = [NSString stringWithFormat:@"Internal error trying to cleanup tempdir (%@ - %@).",
+                                                    error.userInfo[NSUnderlyingErrorKey],
+                                                    error.userInfo[NSLocalizedFailureReasonErrorKey]];
         [self addMessageFromThread:msg messageType:kCSMessageTypeError];
     }
 }
@@ -471,20 +457,16 @@ typedef NS_ENUM(NSInteger, CSMessageType)
 {
     @try {
         // load it and add it to our set
-        CoverStoryCoverageFileData *fileData
-        = [CoverStoryCoverageFileData newCoverageFileDataFromPath:fullPath
-                                                         document:self
-                                                  messageReceiver:self];
+        CoverStoryCoverageFileData *fileData = [CoverStoryCoverageFileData newCoverageFileDataFromPath:fullPath
+                                                                                              document:self
+                                                                                       messageReceiver:self];
         if (fileData)
         {
-            [self performSelectorOnMainThread:@selector(addFileData:)
-                                   withObject:fileData
-                                waitUntilDone:NO];
+            [self performSelectorOnMainThread:@selector(addFileData:) withObject:fileData waitUntilDone:NO];
         }
     }
     @catch (NSException *e) {
-        NSString *msg
-        = [NSString stringWithFormat:@"Internal error trying load coverage data (%@ - %@).",
+        NSString *msg = [NSString stringWithFormat:@"Internal error trying load coverage data (%@ - %@).",
            [e name], [e reason]];
         [self addMessageFromThread:msg messageType:kCSMessageTypeError];
     }
