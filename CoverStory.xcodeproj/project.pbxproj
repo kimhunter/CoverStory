@@ -914,6 +914,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F426B7420E0A261000348386 /* DebugUnittest.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -923,6 +924,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "UnitTests-Info.plist";
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = UnitTests;
 				WRAPPER_EXTENSION = octest;
 			};
@@ -932,6 +934,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F426B7430E0A261000348386 /* ReleaseUnittest.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -941,6 +944,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "UnitTests-Info.plist";
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = UnitTests;
 				WRAPPER_EXTENSION = octest;
 			};
