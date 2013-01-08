@@ -31,7 +31,7 @@
     };
     for (size_t x = 0; x < sizeof(testData) / sizeof(struct TestDataRecord); ++x)
     {
-        NSString *line =  strlen(testData[x].line) ? @ (testData[x].line) : nil;
+        NSString *line =  strlen(testData[x].line) ? @(testData[x].line) : nil;
         
         CoverStoryCoverageLineData *data = [CoverStoryCoverageLineData newCoverageLineDataWithLine:line
                                                                                           hitCount:testData[x].hitCount
@@ -101,7 +101,7 @@
     };
     for (size_t x = 0; x < sizeof(testData) / sizeof(struct TestDataRecord); ++x)
     {
-        NSString *path = [testBundle pathForResource:@ (testData[x].name)
+        NSString *path = [testBundle pathForResource:@(testData[x].name)
                                               ofType:@"gcov"];
         STAssertNotNil(path, @"index %u", x);
         CoverStoryCoverageFileData *data =
@@ -113,7 +113,7 @@
                        (NSUInteger)testData[x].numberTotalLines,
                        @"index %u", x);
         STAssertEqualObjects([data sourcePath],
-                             @ (testData[x].sourcePath),
+                             @(testData[x].sourcePath),
                              @"index %u", x);
         NSInteger totalLines     = 0;
         NSInteger codeLines      = 0;
@@ -161,7 +161,7 @@
     CoverStoryCoverageFileData *prevData = nil;
     for (size_t x = 0; x < sizeof(testData) / sizeof(struct TestDataRecord); ++x)
     {
-        NSString *path = [testBundle pathForResource:@ (testData[x].name)
+        NSString *path = [testBundle pathForResource:@(testData[x].name)
                                               ofType:@"gcov"];
         // load the file blob and store in a set to ensure they each have different
         // byte sequences (due to the end of line markers they are using)
@@ -181,7 +181,7 @@
                        (NSUInteger)testData[x].numberTotalLines,
                        @"index %u", x);
         STAssertEqualObjects([data sourcePath],
-                             @ (testData[x].sourcePath),
+                             @(testData[x].sourcePath),
                              @"index %u", x);
         NSInteger totalLines     = 0;
         NSInteger codeLines      = 0;

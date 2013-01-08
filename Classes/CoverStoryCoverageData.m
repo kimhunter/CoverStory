@@ -394,7 +394,7 @@ codeCoverage
             nonFeasibleLines:NULL
               coverageString:NULL
                     coverage:&result];
-    return @ (result);
+    return @(result);
 }
 
 - (void)coverageTotalLines:(NSInteger *)outTotal

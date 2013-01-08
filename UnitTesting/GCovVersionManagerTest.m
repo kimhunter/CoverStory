@@ -82,8 +82,8 @@
     
     for (size_t x = 0; x < sizeof(testData) / sizeof(testData[0]); ++x)
     {
-        NSString *path = [testBundle pathForResource:@ (testData[x].name) ofType:nil];
-        STAssertEqualObjects([mgr versionFromGCovFile:path], @ (testData[x].version), @"index %zu - path: %@", x, path);
+        NSString *path = [testBundle pathForResource:@(testData[x].name) ofType:nil];
+        STAssertEqualObjects([mgr versionFromGCovFile:path], @(testData[x].version), @"index %zu - path: %@", x, path);
     }
     
     // Feed it something that doesn't have magic on the front and doesn't exist
