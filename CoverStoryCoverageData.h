@@ -78,7 +78,7 @@ enum {
 // this is only vended for the table to sort with
 @property (readonly, nonatomic, strong) NSNumber *coverage;
 
-+ (id)coverageFileDataFromPath:(NSString *)path
++ (id)newCoverageFileDataFromPath:(NSString *)path
                       document:(CoverStoryDocument *)document
                messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver;
 - (id)initWithPath:(NSString *)path
@@ -114,7 +114,7 @@ enum {
 @property (readonly, nonatomic, copy) NSString *line;
 @property (weak) CoverStoryCoverageFileData *coverageFile;
 
-+ (id)coverageLineDataWithLine:(NSString*)line 
++ (id)newCoverageLineDataWithLine:(NSString*)line 
                       hitCount:(NSInteger)hitCount 
                   coverageFile:(CoverStoryCoverageFileData *)coverageFile;
 - (id)initWithLine:(NSString*)line 

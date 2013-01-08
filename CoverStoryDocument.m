@@ -190,7 +190,7 @@ typedef enum {
          path];
         [self addMessageFromThread:message messageType:kCSMessageTypeInfo];
         // load it and add it to our set
-        CoverStoryCoverageFileData *fileData = [CoverStoryCoverageFileData coverageFileDataFromPath:path
+        CoverStoryCoverageFileData *fileData = [CoverStoryCoverageFileData newCoverageFileDataFromPath:path
                                                                                            document:self
                                                                                     messageReceiver:self];
         if (fileData)
@@ -442,7 +442,7 @@ typedef enum {
   @try {
     // load it and add it to our set
     CoverStoryCoverageFileData *fileData
-      = [CoverStoryCoverageFileData coverageFileDataFromPath:fullPath
+      = [CoverStoryCoverageFileData newCoverageFileDataFromPath:fullPath
                                                     document:self
                                              messageReceiver:self];
     if (fileData) {

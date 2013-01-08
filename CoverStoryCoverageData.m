@@ -128,7 +128,7 @@ static float codeCoverage(NSInteger codeLines, NSInteger hitCodeLines,
 @dynamic coverage;
 
 
-+ (id)coverageFileDataFromPath:(NSString *)path
++ (id)newCoverageFileDataFromPath:(NSString *)path
                       document:(CoverStoryDocument *)document
                messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver {
   return [[self alloc] initWithPath:path
@@ -260,7 +260,7 @@ static float codeCoverage(NSInteger codeLines, NSInteger hitCodeLines,
             inNonFeasibleRange = YES;
           }
         }
-        [lines_ addObject:[CoverStoryCoverageLineData coverageLineDataWithLine:segment
+        [lines_ addObject:[CoverStoryCoverageLineData newCoverageLineDataWithLine:segment
                                                                       hitCount:hitCount
                                                                   coverageFile:self]];
       }
@@ -530,7 +530,7 @@ static float codeCoverage(NSInteger codeLines, NSInteger hitCodeLines,
 @synthesize line = line_;
 @synthesize coverageFile = coverageFile_;
 
-+ (id)coverageLineDataWithLine:(NSString*)line
++ (id)newCoverageLineDataWithLine:(NSString*)line
                       hitCount:(NSInteger)hitCount
                   coverageFile:(CoverStoryCoverageFileData *)coverageFile {
   return [[self alloc] initWithLine:line
