@@ -826,16 +826,15 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				COVERSTORY_SUFEEDURL = "http://coverstory.googlecode.com/svn/trunk/SparkleData/CoverStoryAppcast.xml";
-				FRAMEWORK_SEARCH_PATHS = (
-					external,
-					"\"$(SRCROOT)/external\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREFIX_HEADER = CoverStoryDocumentTypes.h;
 				INFOPLIST_PREPROCESS = YES;
+				KEEP_PRIVATE_EXTERNS = NO;
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = CoverStory;
 				WRAPPER_EXTENSION = app;
 			};
@@ -846,16 +845,15 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				COVERSTORY_SUFEEDURL = "http://coverstory.googlecode.com/svn/trunk/SparkleData/CoverStoryAppcast.xml";
-				FRAMEWORK_SEARCH_PATHS = (
-					external,
-					"\"$(SRCROOT)/external\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/external\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_PREFIX_HEADER = CoverStoryDocumentTypes.h;
 				INFOPLIST_PREPROCESS = YES;
+				KEEP_PRIVATE_EXTERNS = NO;
 				LEXFLAGS = "$(inherited) --noyy_top_state";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = CoverStory;
 				WRAPPER_EXTENSION = app;
 			};
@@ -907,6 +905,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+					"\"$(SRCROOT)/external\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "UnitTests-Info.plist";
@@ -924,6 +923,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+					"\"$(SRCROOT)/external\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = "UnitTests-Info.plist";
