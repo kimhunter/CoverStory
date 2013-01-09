@@ -8,7 +8,7 @@
 
 #import "CoverStoryValueTransformers.h"
 
-#import "CoverStoryCoverageData.h"
+#import "CoverStoryCoverageLineData.h"
 #import "CoverStoryPreferenceKeys.h"
 #import "CoverStoryDocument.h"
 

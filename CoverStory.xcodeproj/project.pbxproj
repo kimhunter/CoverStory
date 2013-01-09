@@ -35,6 +35,12 @@
 /* End PBXAppleScriptBuildPhase section */
 
 /* Begin PBXBuildFile section */
+		3B4E663F169D691A0078D46D /* CoverStoryCoverageFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E663E169D691A0078D46D /* CoverStoryCoverageFileData.m */; };
+		3B4E6640169D691A0078D46D /* CoverStoryCoverageFileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E663E169D691A0078D46D /* CoverStoryCoverageFileData.m */; };
+		3B4E6644169D6ADE0078D46D /* CoverStoryCoverageSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E6643169D6ADE0078D46D /* CoverStoryCoverageSet.m */; };
+		3B4E6645169D6ADE0078D46D /* CoverStoryCoverageSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E6643169D6ADE0078D46D /* CoverStoryCoverageSet.m */; };
+		3B4E6648169D6BD90078D46D /* CoverStoryCoverageLineData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E6647169D6BD90078D46D /* CoverStoryCoverageLineData.m */; };
+		3B4E6649169D6BD90078D46D /* CoverStoryCoverageLineData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B4E6647169D6BD90078D46D /* CoverStoryCoverageLineData.m */; };
 		63BC85EC0B4D863400CDC9E5 /* main.css in Resources */ = {isa = PBXBuildFile; fileRef = 63BC85EA0B4D863400CDC9E5 /* main.css */; };
 		8B2A9C6D0D84F84600599386 /* gcov.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8B2A9C6A0D84F84600599386 /* gcov.icns */; };
 		8B2A9C6E0D84F84600599386 /* gcno.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8B2A9C6B0D84F84600599386 /* gcno.icns */; };
@@ -149,6 +155,13 @@
 		2A37F4AEFDCFA73011CA2CEA /* CoverStoryDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; explicitFileType = wrapper.rtfd; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		3B4E663D169D691A0078D46D /* CoverStoryCoverageFileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryCoverageFileData.h; sourceTree = "<group>"; };
+		3B4E663E169D691A0078D46D /* CoverStoryCoverageFileData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverStoryCoverageFileData.m; sourceTree = "<group>"; };
+		3B4E6641169D69F40078D46D /* CoverStoryProtocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryProtocols.h; sourceTree = "<group>"; };
+		3B4E6642169D6ADE0078D46D /* CoverStoryCoverageSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryCoverageSet.h; sourceTree = "<group>"; };
+		3B4E6643169D6ADE0078D46D /* CoverStoryCoverageSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverStoryCoverageSet.m; sourceTree = "<group>"; };
+		3B4E6646169D6BD90078D46D /* CoverStoryCoverageLineData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoverStoryCoverageLineData.h; sourceTree = "<group>"; };
+		3B4E6647169D6BD90078D46D /* CoverStoryCoverageLineData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoverStoryCoverageLineData.m; sourceTree = "<group>"; };
 		63BC85EA0B4D863400CDC9E5 /* main.css */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = main.css; sourceTree = "<group>"; };
 		8B198D2F0C7DF72D002E4E3F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		8B2A9C6A0D84F84600599386 /* gcov.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = gcov.icns; sourceTree = "<group>"; };
@@ -313,6 +326,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				3B4E663B169D68EC0078D46D /* CoverageData */,
 				8B4091130F8E733D00DF540E /* CoverStoryApplication.m */,
 				8BFD613E0B3F9DE500AFCDA2 /* CoverStoryApplicationDelegate.h */,
 				8BFD613F0B3F9DE500AFCDA2 /* CoverStoryApplicationDelegate.m */,
@@ -391,6 +405,20 @@
 				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B4E663B169D68EC0078D46D /* CoverageData */ = {
+			isa = PBXGroup;
+			children = (
+				3B4E663D169D691A0078D46D /* CoverStoryCoverageFileData.h */,
+				3B4E663E169D691A0078D46D /* CoverStoryCoverageFileData.m */,
+				3B4E6641169D69F40078D46D /* CoverStoryProtocols.h */,
+				3B4E6642169D6ADE0078D46D /* CoverStoryCoverageSet.h */,
+				3B4E6643169D6ADE0078D46D /* CoverStoryCoverageSet.m */,
+				3B4E6646169D6BD90078D46D /* CoverStoryCoverageLineData.h */,
+				3B4E6647169D6BD90078D46D /* CoverStoryCoverageLineData.m */,
+			);
+			name = CoverageData;
 			sourceTree = "<group>";
 		};
 		8B4097530F91644F00DF540E /* external */ = {
@@ -713,6 +741,9 @@
 				F41A325311B6BA1A00176CCC /* GCovVersionManager.m in Sources */,
 				8BB788F811B8467800AB31AF /* CoverStoryArrayController.m in Sources */,
 				8BB7893111B84F1F00AB31AF /* NSUserDefaultsController+KeyValues.m in Sources */,
+				3B4E663F169D691A0078D46D /* CoverStoryCoverageFileData.m in Sources */,
+				3B4E6644169D6ADE0078D46D /* CoverStoryCoverageSet.m in Sources */,
+				3B4E6648169D6BD90078D46D /* CoverStoryCoverageLineData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,6 +757,9 @@
 				F487520811B6CA8800774A63 /* GCovVersionManagerTest.m in Sources */,
 				F487520911B6CA9E00774A63 /* GCovVersionManager.m in Sources */,
 				F487523211B6CEAE00774A63 /* GTMNSEnumerator+Filter.m in Sources */,
+				3B4E6640169D691A0078D46D /* CoverStoryCoverageFileData.m in Sources */,
+				3B4E6645169D6ADE0078D46D /* CoverStoryCoverageSet.m in Sources */,
+				3B4E6649169D6BD90078D46D /* CoverStoryCoverageLineData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

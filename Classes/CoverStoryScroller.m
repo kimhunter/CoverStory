@@ -18,7 +18,7 @@
 //
 
 #import "CoverStoryScroller.h"
-#import "CoverStoryCoverageData.h"
+#import "CoverStoryCoverageLineData.h"
 #import <Carbon/Carbon.h>
 
 @implementation CoverStoryScroller

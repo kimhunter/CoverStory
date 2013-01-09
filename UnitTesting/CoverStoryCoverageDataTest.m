@@ -7,7 +7,9 @@
 //
 
 #import "GTMSenTestCase.h"
-#import "CoverStoryCoverageData.h"
+#import "CoverStoryCoverageFileData.h"
+#import "CoverStoryCoverageLineData.h"
+#import "CoverStoryCoverageSet.h"
 
 @interface CoverStoryCoverageDataTest : SenTestCase
 @end

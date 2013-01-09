@@ -19,8 +19,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "GTMDefines.h"
+#import "CoverStoryProtocols.h"
+#import "CoverStoryCoverageFileData.h"
 
 @class CoverStoryDocument;
+extern float codeCoverage(NSInteger codeLines, NSInteger hitCodeLines, NSString * *outCoverageString);
 
 enum {
     // Value for hitCount for lines that aren't executed
@@ -30,18 +33,6 @@ enum {
 };
 
 #pragma mark -
-
-@protocol CoverStoryLineCoverageProtocol
-
-- (void)coverageTotalLines:(NSInteger *)outTotal
-                 codeLines:(NSInteger *)outCode // doesn't include non-feasible
-              hitCodeLines:(NSInteger *)outHitCode
-          nonFeasibleLines:(NSInteger *)outNonFeasible
-            coverageString:(NSString * *)outCoverageString
-                  coverage:(float *)outCoverage; // use the string for display,
-                                                 // this is just here for calcs
-                                                 // and sorts
-@end
 
 #pragma mark -
 
@@ -57,61 +48,12 @@ enum {
                                                  // and sorts
 @end
 
-// methods to get feedback while the data is processed
-@protocol CoverStoryCoverageProcessingProtocol
-- (void)coverageErrorForPath:(NSString *)path message:(NSString *)format, ...NS_FORMAT_FUNCTION(2, 3);
-- (void)coverageWarningForPath:(NSString *)path message:(NSString *)format, ...NS_FORMAT_FUNCTION(2, 3);
-@end
 
 #pragma mark -
 
 // Keeps track of the data for a whole source file.
 
-@interface CoverStoryCoverageFileData : NSObject<CoverStoryLineCoverageProtocol> {
-@private
-    NSMutableArray *_lines;
-    NSString *_sourcePath;
-    NSMutableArray *_warnings;
-}
-
-@property (nonatomic, weak) CoverStoryDocument *document;
-@property (readonly, nonatomic, copy) NSString *sourcePath;
-@property (readonly, nonatomic, strong) NSArray *lines; // of CoverStoryCoverageLineData
-
-// this is only vended for the table to sort with
-@property (readonly) NSNumber *coverage;
-
-+ (id)newCoverageFileDataFromPath:(NSString *)path document:(CoverStoryDocument *)document messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver;
-- (id)initWithPath:(NSString *)path document:(CoverStoryDocument *)document messageReceiver:(id<CoverStoryCoverageProcessingProtocol> )receiver;
-
-@end
-
 #pragma mark -
 
-// Keeps track of a set of source files.
-
-@interface CoverStoryCoverageSet : NSObject<CoverStoryLineCoverageProtocol> {
-@private
-    NSMutableArray *_fileDatas;
-}
-- (void)removeAllData;
-- (BOOL)addFileData:(CoverStoryCoverageFileData *)fileData messageReceiver :(id<CoverStoryCoverageProcessingProtocol>)receiver;
-@end
 
 #pragma mark -
-
-// Keeps track of the number of times a line of code has been hit. There is
-// one CoverStoryCoverageLineData object per line of code in the file.
-
-@interface CoverStoryCoverageLineData : NSObject {
-}
-
-@property (readonly, nonatomic, assign) NSInteger hitCount; // how many times this line has been hit
-@property (readonly, nonatomic, copy) NSString *line; //  the line
-@property (weak) CoverStoryCoverageFileData *coverageFile;
-
-+ (id)newCoverageLineDataWithLine:(NSString *)line hitCount:(NSInteger)hitCount coverageFile:(CoverStoryCoverageFileData *)coverageFile;
-- (id)initWithLine:(NSString *)line hitCount:(NSInteger)hitCount coverageFile:(CoverStoryCoverageFileData *)coverageFile;
-- (void)addHits:(NSInteger)newHits;
-
-@end

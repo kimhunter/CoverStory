@@ -24,6 +24,7 @@
 
 @class CoverStoryArrayController;
 @class CoverStoryCodeViewTableView;
+@class CoverStoryCoverageSet;
 
 @interface CoverStoryDocument : NSDocument<CoverStoryCoverageProcessingProtocol,
                                            NSAnimationDelegate> {
