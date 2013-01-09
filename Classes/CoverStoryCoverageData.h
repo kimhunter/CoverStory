@@ -69,19 +69,17 @@ enum {
 
 @interface CoverStoryCoverageFileData : NSObject<CoverStoryLineCoverageProtocol> {
 @private
-    NSMutableArray *lines_; // of CoverStoryCoverageLineData
-    NSInteger hitLines_;
-    NSInteger codeLines_;
-    NSInteger nonfeasible_;
-    NSString *sourcePath_;
-    NSMutableArray *warnings_;
+    NSMutableArray *_lines;
+    NSString *_sourcePath;
+    NSMutableArray *_warnings;
 }
 
 @property (nonatomic, weak) CoverStoryDocument *document;
 @property (readonly, nonatomic, copy) NSString *sourcePath;
-@property (readonly, nonatomic, strong) NSArray *lines;
+@property (readonly, nonatomic, strong) NSArray *lines; // of CoverStoryCoverageLineData
+
 // this is only vended for the table to sort with
-@property (readonly, nonatomic, strong) NSNumber *coverage;
+@property (readonly) NSNumber *coverage;
 
 + (id)newCoverageFileDataFromPath:(NSString *)path document:(CoverStoryDocument *)document messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver;
 - (id)initWithPath:(NSString *)path document:(CoverStoryDocument *)document messageReceiver:(id<CoverStoryCoverageProcessingProtocol> )receiver;

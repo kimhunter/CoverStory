@@ -138,14 +138,6 @@ codeCoverage
 
 @implementation CoverStoryCoverageFileData
 
-@synthesize sourcePath  = sourcePath_;
-@synthesize lines       = lines_;
-@synthesize hitLines    = hitLines_;
-@synthesize codeLines   = codeLines_;
-@synthesize nonfeasible = nonfeasible_;
-@dynamic coverage;
-
-
 + (id)newCoverageFileDataFromPath:(NSString *)path
                          document:(CoverStoryDocument *)document
                   messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
@@ -162,7 +154,7 @@ codeCoverage
     if ((self = [super init]))
     {
         _document = document;
-        lines_    = [[NSMutableArray alloc] init];
+        _lines    = [[NSMutableArray alloc] init];
         // The dirty secret: we queue up warnings and don't report them in realtime.
         // Why?  if we report them now, then if the directory with multiple arches
         // we'll send the warning for each arch, and if the file occures in more
@@ -170,7 +162,7 @@ codeCoverage
         // each time we read that header.  So instead we queue them, and don't
         // send them over to the receiver until it's added to a set, and only if
         // it's new, this way we're sure we only send them once.
-        warnings_ = [[NSMutableArray alloc] init];
+        _warnings = [[NSMutableArray alloc] init];
         
         // Scan in our data and create up out CoverStoryCoverageLineData objects.
         // TODO(dmaclach): make this routine a little more "error tolerant"
@@ -248,8 +240,8 @@ codeCoverage
                         NSString *warning =
                         [NSString stringWithFormat:@"Line %lu is in a Non Feasible block,"
                          " but was executed.",
-                         (unsigned long)[lines_ count] - 4];
-                        [warnings_ addObject:warning];
+                         (unsigned long)[_lines count] - 4];
+                        [_warnings addObject:warning];
                     }
                     // if the line was gonna count, mark it as non feasible (we only mark
                     // the lines that would have counted so the total number of non
@@ -275,8 +267,8 @@ codeCoverage
                             NSString *warning =
                             [NSString stringWithFormat:@"Line %lu is marked as a Non"
                              " Feasible line, but was executed.",
-                             (unsigned long)[lines_ count] - 4];
-                            [warnings_ addObject:warning];
+                             (unsigned long)[_lines count] - 4];
+                            [_warnings addObject:warning];
                         }
                         hitCount = kCoverStoryNonFeasibleMarker;
                     }
@@ -288,8 +280,8 @@ codeCoverage
                             NSString *warning =
                             [NSString stringWithFormat:@"Line %lu is in a Non Feasible"
                              " block, but was executed.",
-                             (unsigned long)[lines_ count] - 4];
-                            [warnings_ addObject:warning];
+                             (unsigned long)[_lines count] - 4];
+                            [_warnings addObject:warning];
                         }
                         // if the line was gonna count, mark it as non feasible (we only mark
                         // the lines that would have counted so the total number of non
@@ -302,20 +294,20 @@ codeCoverage
                         inNonFeasibleRange = YES;
                     }
                 }
-                [lines_ addObject:[CoverStoryCoverageLineData newCoverageLineDataWithLine:segment
+                [_lines addObject:[CoverStoryCoverageLineData newCoverageLineDataWithLine:segment
                                                                                  hitCount:hitCount
                                                                              coverageFile:self]];
             }
             
             // The first five lines are not data we want to show to the user
-            if ([lines_ count] > 5)
+            if ([_lines count] > 5)
             {
                 // The first line contains the path to our source.  Most projects use
                 // paths relative to the project, so just incase they walk into a
                 // neighbor directory, resolve them.
-                NSString *srcPath = [[[lines_ objectAtIndex:0] line] substringFromIndex:7];
-                sourcePath_ = [srcPath stringByStandardizingPath];
-                [lines_ removeObjectsInRange:NSMakeRange(0, 5)];
+                NSString *srcPath = [[[_lines objectAtIndex:0] line] substringFromIndex:7];
+                _sourcePath = [srcPath stringByStandardizingPath];
+                [_lines removeObjectsInRange:NSMakeRange(0, 5)];
                 // get out counts
                 [self updateCounts];
             }
@@ -345,7 +337,7 @@ codeCoverage
 
 - (NSUInteger)hash
 {
-    return [sourcePath_ hash];
+    return [_sourcePath hash];
 }
 
 - (void)updateCounts
@@ -353,7 +345,7 @@ codeCoverage
     NSInteger hitLines    = 0;
     NSInteger codeLines   = 0;
     NSInteger nonfeasible = 0;
-    for (CoverStoryCoverageLineData *dataPoint in lines_)
+    for (CoverStoryCoverageLineData *dataPoint in _lines)
     {
         NSInteger hitCount = [dataPoint hitCount];
         switch (hitCount) {
@@ -381,7 +373,7 @@ codeCoverage
 
 - (NSArray *)queuedWarnings
 {
-    return warnings_;
+    return _warnings;
 }
 
 - (NSNumber *)coverage
@@ -405,7 +397,7 @@ codeCoverage
 {
     if (outTotal)
     {
-        *outTotal = [lines_ count];
+        *outTotal = [_lines count];
     }
     if (outCode)
     {
@@ -421,7 +413,7 @@ codeCoverage
     }
     if (outCoverageString || outCoverage)
     {
-        float coverage = codeCoverage(codeLines_, hitLines_, outCoverageString);
+        float coverage = codeCoverage(_codeLines, _hitLines, outCoverageString);
         if (outCoverage)
         {
             *outCoverage = coverage;
@@ -433,11 +425,11 @@ codeCoverage
     messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
 {
     // must be for the same paths
-    if (![[fileData sourcePath] isEqual:sourcePath_])
+    if (![[fileData sourcePath] isEqual:_sourcePath])
     {
         if (receiver)
         {
-            [receiver coverageErrorForPath:sourcePath_
+            [receiver coverageErrorForPath:_sourcePath
                                    message:@"coverage is for different source path:%@",
              [fileData sourcePath]];
         }
@@ -446,22 +438,22 @@ codeCoverage
     
     // make sure the source file lines actually match
     NSArray *newLines = [fileData lines];
-    if ([newLines count] != [lines_ count])
+    if ([newLines count] != [_lines count])
     {
         if (receiver)
         {
-            [receiver coverageErrorForPath:sourcePath_
+            [receiver coverageErrorForPath:_sourcePath
                                    message:@"coverage source (%@) has different line count '%lu' vs '%lu'",
              [fileData sourcePath],
              (unsigned long)[newLines count],
-             (unsigned long)[lines_ count]];
+             (unsigned long)[_lines count]];
         }
         return NO;
     }
     for (NSUInteger x = 0, max = [newLines count]; x < max; ++x )
     {
         CoverStoryCoverageLineData *lineNew = [newLines objectAtIndex:x];
-        CoverStoryCoverageLineData *lineMe  = [lines_ objectAtIndex:x];
+        CoverStoryCoverageLineData *lineMe  = [_lines objectAtIndex:x];
         
         // string match the lines (since the Non Feasible support is via comments,
         // this makes sure they also match)
@@ -469,7 +461,7 @@ codeCoverage
         {
             if (receiver)
             {
-                [receiver coverageErrorForPath:sourcePath_
+                [receiver coverageErrorForPath:_sourcePath
                                        message:@"coverage source (%@) line %lu doesn't match, '%@' vs '%@'",
                  [fileData sourcePath], (unsigned long)x, [lineNew line], [lineMe line]];
             }
@@ -484,7 +476,7 @@ codeCoverage
     for (NSUInteger x = 0, max = [newLines count]; x < max; ++x )
     {
         CoverStoryCoverageLineData *lineNew = [newLines objectAtIndex:x];
-        CoverStoryCoverageLineData *lineMe  = [lines_ objectAtIndex:x];
+        CoverStoryCoverageLineData *lineMe  = [_lines objectAtIndex:x];
         [lineMe addHits:[lineNew hitCount]];
     }
     
@@ -498,8 +490,8 @@ codeCoverage
     return [NSString stringWithFormat:
             @"%@: %lu total lines, %ld lines non-feasible, "
             @"%ld lines of code, %ld lines hit",
-            sourcePath_, (unsigned long)[lines_ count],
-            (long)nonfeasible_, (long)codeLines_, (long)hitLines_];
+            _sourcePath, (unsigned long)[_lines count],
+            (long)_nonfeasible, (long)_codeLines, (long)_hitLines];
 }
 
 
