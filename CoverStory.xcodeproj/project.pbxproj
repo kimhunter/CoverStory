@@ -334,8 +334,6 @@
 				8BB788F711B8467800AB31AF /* CoverStoryArrayController.m */,
 				8BC4AAB60D94D06100437182 /* CoverStoryCodeViewTableView.h */,
 				8BC4AAB70D94D06100437182 /* CoverStoryCodeViewTableView.m */,
-				8BFD54F40B3F009300AFCDA2 /* CodeCoverage.h */,
-				8BFD54F50B3F009300AFCDA2 /* CodeCoverage.m */,
 				2A37F4AEFDCFA73011CA2CEA /* CoverStoryDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* CoverStoryDocument.m */,
 				8BA270B60D87C9AE0092884C /* CoverStoryDocumentController.h */,
@@ -410,6 +408,8 @@
 		3B4E663B169D68EC0078D46D /* CoverageData */ = {
 			isa = PBXGroup;
 			children = (
+				8BFD54F40B3F009300AFCDA2 /* CodeCoverage.h */,
+				8BFD54F50B3F009300AFCDA2 /* CodeCoverage.m */,
 				3B4E663D169D691A0078D46D /* CoverStoryCoverageFileData.h */,
 				3B4E663E169D691A0078D46D /* CoverStoryCoverageFileData.m */,
 				3B4E6641169D69F40078D46D /* CoverStoryProtocols.h */,

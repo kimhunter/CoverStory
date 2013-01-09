@@ -17,8 +17,6 @@
 //  the License.
 //
 
-#import "CoverStoryDocument.h"
-#import "GTMRegex.h"
 #import "CoverStoryProtocols.h"
 
 

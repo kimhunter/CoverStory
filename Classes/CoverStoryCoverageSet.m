@@ -10,9 +10,7 @@
 #import "CoverStoryCoverageFileData.h"
 #import "CodeCoverage.h"
 
-@interface CoverStoryCoverageSet () {
-    NSMutableArray *_fileDatas;
-}
+@interface CoverStoryCoverageSet ()
 @property (readonly) NSMutableArray *fileDatas;
 @end
 
@@ -30,8 +28,7 @@
 }
 
 
-- (BOOL)addFileData:(CoverStoryCoverageFileData *)fileData
-    messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
+- (BOOL)addFileData:(CoverStoryCoverageFileData *)fileData messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
 {
     BOOL wasGood   = NO;
     NSUInteger idx = [_fileDatas indexOfObject:fileData];

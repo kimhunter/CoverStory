@@ -5,9 +5,11 @@
 //  Created by Kim Hunter on 9/01/13.
 //  Copyright (c) 2013 Google Inc. All rights reserved.
 //
+// Keeps track of the data for a whole source file.
 
 #import <Foundation/Foundation.h>
-#import "CoverStoryDocument.h"
+#import "CodeCoverage.h"
+
 @class CoverStoryCoverageLineData;
 @class CoverStoryDocument;
 

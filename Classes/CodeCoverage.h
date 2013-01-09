@@ -18,7 +18,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "GTMDefines.h"
 #import "CoverStoryProtocols.h"
 #import "CoverStoryCoverageFileData.h"
 
@@ -51,7 +50,6 @@ enum {
 
 #pragma mark -
 
-// Keeps track of the data for a whole source file.
 
 #pragma mark -
 

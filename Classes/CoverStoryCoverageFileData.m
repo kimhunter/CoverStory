@@ -8,16 +8,15 @@
 
 #import "CoverStoryCoverageFileData.h"
 #import "CoverStoryCoverageLineData.h"
-#import "CodeCoverage.h"
+#import "CoverStoryDocument.h"
 #import "GTMRegex.h"
 
 @interface CoverStoryCoverageFileData ()
+
 @property (readwrite, nonatomic, assign) NSInteger hitLines;
 @property (readwrite, nonatomic, assign) NSInteger codeLines;
 @property (readwrite, nonatomic, assign) NSInteger nonfeasible;
 
-- (void)updateCounts;
-- (NSArray *)queuedWarnings;
 @end
 
 @implementation CoverStoryCoverageFileData

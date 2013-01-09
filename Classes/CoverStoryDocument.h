@@ -26,8 +26,7 @@
 @class CoverStoryCodeViewTableView;
 @class CoverStoryCoverageSet;
 
-@interface CoverStoryDocument : NSDocument<CoverStoryCoverageProcessingProtocol,
-                                           NSAnimationDelegate> {
+@interface CoverStoryDocument : NSDocument<CoverStoryCoverageProcessingProtocol, NSAnimationDelegate> {
  @private
   IBOutlet CoverStoryCodeViewTableView *codeTableView_;  // the code table
   IBOutlet CoverStoryArrayController *sourceFilesController_;
