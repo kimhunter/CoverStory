@@ -22,8 +22,7 @@
 @implementation CoverStoryDocumentController
 
 // Allow us to open folders
-- (NSInteger)runModalOpenPanel:(NSOpenPanel *)openPanel
-                      forTypes:(NSArray *)extensions
+- (NSInteger)runModalOpenPanel:(NSOpenPanel *)openPanel forTypes:(NSArray *)extensions
 {
     [openPanel setCanChooseDirectories:YES];
     [openPanel setAllowedFileTypes:extensions];
