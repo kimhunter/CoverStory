@@ -29,6 +29,8 @@ enum {
     kCoverStoryNonFeasibleMarker = -2
 };
 
+#pragma mark -
+
 @protocol CoverStoryLineCoverageProtocol
 
 - (void)coverageTotalLines:(NSInteger *)outTotal
@@ -40,6 +42,8 @@ enum {
                                                  // this is just here for calcs
                                                  // and sorts
 @end
+
+#pragma mark -
 
 @interface NSEnumerator (CodeCoverage)
 
@@ -59,6 +63,8 @@ enum {
 - (void)coverageWarningForPath:(NSString *)path message:(NSString *)format, ...NS_FORMAT_FUNCTION(2, 3);
 @end
 
+#pragma mark -
+
 // Keeps track of the data for a whole source file.
 
 @interface CoverStoryCoverageFileData : NSObject<CoverStoryLineCoverageProtocol> {
@@ -69,7 +75,6 @@ enum {
     NSInteger nonfeasible_;
     NSString *sourcePath_;
     NSMutableArray *warnings_;
-    __weak CoverStoryDocument *document_;
 }
 
 @property (nonatomic, weak) CoverStoryDocument *document;
@@ -83,30 +88,28 @@ enum {
 
 @end
 
+#pragma mark -
 
 // Keeps track of a set of source files.
 
 @interface CoverStoryCoverageSet : NSObject<CoverStoryLineCoverageProtocol> {
 @private
-    NSMutableArray *fileDatas_;
+    NSMutableArray *_fileDatas;
 }
 - (void)removeAllData;
 - (BOOL)addFileData:(CoverStoryCoverageFileData *)fileData messageReceiver :(id<CoverStoryCoverageProcessingProtocol>)receiver;
 @end
 
+#pragma mark -
 
 // Keeps track of the number of times a line of code has been hit. There is
 // one CoverStoryCoverageLineData object per line of code in the file.
 
 @interface CoverStoryCoverageLineData : NSObject {
-@private
-    NSInteger hitCount_; // how many times this line has been hit
-    NSString *line_; //  the line
-    __weak CoverStoryCoverageFileData *coverageFile_;
 }
 
-@property (readonly, nonatomic, assign) NSInteger hitCount;
-@property (readonly, nonatomic, copy) NSString *line;
+@property (readonly, nonatomic, assign) NSInteger hitCount; // how many times this line has been hit
+@property (readonly, nonatomic, copy) NSString *line; //  the line
 @property (weak) CoverStoryCoverageFileData *coverageFile;
 
 + (id)newCoverageLineDataWithLine:(NSString *)line hitCount:(NSInteger)hitCount coverageFile:(CoverStoryCoverageFileData *)coverageFile;

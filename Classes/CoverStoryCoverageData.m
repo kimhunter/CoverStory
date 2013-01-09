@@ -138,7 +138,6 @@ codeCoverage
 
 @implementation CoverStoryCoverageFileData
 
-@synthesize document    = document_;
 @synthesize sourcePath  = sourcePath_;
 @synthesize lines       = lines_;
 @synthesize hitLines    = hitLines_;
@@ -162,7 +161,7 @@ codeCoverage
 {
     if ((self = [super init]))
     {
-        document_ = document;
+        _document = document;
         lines_    = [[NSMutableArray alloc] init];
         // The dirty secret: we queue up warnings and don't report them in realtime.
         // Why?  if we report them now, then if the directory with multiple arches
@@ -508,13 +507,11 @@ codeCoverage
 
 @implementation CoverStoryCoverageSet
 
-@synthesize fileDatas = fileDatas_;
-
 - (id)init
 {
     if ((self = [super init]))
     {
-        fileDatas_ = [[NSMutableArray alloc] init];
+        _fileDatas = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -524,10 +521,10 @@ codeCoverage
     messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
 {
     BOOL wasGood   = NO;
-    NSUInteger idx = [fileDatas_ indexOfObject:fileData];
+    NSUInteger idx = [_fileDatas indexOfObject:fileData];
     if (idx != NSNotFound)
     {
-        CoverStoryCoverageFileData *currentData = [fileDatas_ objectAtIndex:idx];
+        CoverStoryCoverageFileData *currentData = [_fileDatas objectAtIndex:idx];
         // we need to merge them
         // (this is needed for headers w/ inlines where if you process >1 gcno/gcda
         // then you could get that header reported >1 time)
@@ -536,11 +533,11 @@ codeCoverage
     else
     {
         // it's new, save it
-        NSUInteger index = [fileDatas_ count];
+        NSUInteger index = [_fileDatas count];
         [self willChange:NSKeyValueChangeInsertion
          valuesAtIndexes:[NSIndexSet indexSetWithIndex:index]
                   forKey:@"fileDatas"];
-        [fileDatas_ insertObject:fileData atIndex:index];
+        [_fileDatas insertObject:fileData atIndex:index];
         [self didChange:NSKeyValueChangeInsertion
         valuesAtIndexes:[NSIndexSet indexSetWithIndex:index]
                  forKey:@"fileDatas"];
@@ -573,7 +570,7 @@ codeCoverage
                   coverage:(float *)outCoverage
 {
     // use the enum helper
-    NSEnumerator *enumerator = [fileDatas_ objectEnumerator];
+    NSEnumerator *enumerator = [_fileDatas objectEnumerator];
     [enumerator coverageTotalLines:outTotal
                          codeLines:outCode
                       hitCodeLines:outHitCode
@@ -584,10 +581,10 @@ codeCoverage
 
 - (void)removeAllData
 {
-    NSRange fullRange   = NSMakeRange(0, [fileDatas_ count]);
+    NSRange fullRange   = NSMakeRange(0, [_fileDatas count]);
     NSIndexSet *fullSet = [NSIndexSet indexSetWithIndexesInRange:fullRange];
     [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:fullSet forKey:@"fileDatas"];
-    [fileDatas_ removeAllObjects];
+    [_fileDatas removeAllObjects];
     [self didChange:NSKeyValueChangeRemoval
     valuesAtIndexes:fullSet forKey:@"fileDatas"];
 }
@@ -595,17 +592,13 @@ codeCoverage
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"%@ <%p>: %lu items in set",
-            [self class], self, (unsigned long)[fileDatas_ count]];
+            [self class], self, (unsigned long)[_fileDatas count]];
 }
 
 @end
 
 
 @implementation CoverStoryCoverageLineData
-
-@synthesize hitCount     = hitCount_;
-@synthesize line         = line_;
-@synthesize coverageFile = coverageFile_;
 
 + (id)newCoverageLineDataWithLine:(NSString *)line
                          hitCount:(NSInteger)hitCount
@@ -620,9 +613,9 @@ codeCoverage
 {
     if ((self = [super init]))
     {
-        hitCount_     = hitCount;
-        line_         = [line copy];
-        coverageFile_ = coverageFile;
+        _hitCount     = hitCount;
+        _line         = [line copy];
+        _coverageFile = coverageFile;
     }
     return self;
 }
@@ -642,7 +635,7 @@ codeCoverage
     {
         NSAssert1(self.hitCount >= 0,
                   @"how was it not feasible in only one version? (hitCount_ = %ld)",
-                  (long)hitCount_);
+                  (long)_hitCount);
         self.hitCount += newHits;
     }
 }
