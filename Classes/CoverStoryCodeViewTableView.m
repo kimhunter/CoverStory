@@ -23,26 +23,21 @@
 #import "NSUserDefaultsController+KeyValues.h"
 #import "CoverStoryDocument.h"
 
-static NSString *const kPrefsToWatch[] = {
-    kCoverStoryMissedLineColorKey,
-    kCoverStoryUnexecutableLineColorKey,
-    kCoverStoryNonFeasibleLineColorKey,
-    kCoverStoryExecutedLineColorKey
-};
 
 @interface CoverStoryCodeViewTableView ()
-
+@property (strong) NSArray *prefsToWatch;
 @end
+
+
 @implementation CoverStoryCodeViewTableView
 
 - (void)dealloc
 {
     NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
-    for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(kPrefsToWatch[0]); ++i)
-    {
-        [defaults removeObserver:self
-                      forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]];
-    }
+
+    [self.prefsToWatch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [defaults removeObserver:self forKeyPath:[NSUserDefaultsController cs_valuesKey:obj]];
+    }];
 }
 
 - (void)awakeFromNib
@@ -52,13 +47,15 @@ static NSString *const kPrefsToWatch[] = {
     NSScrollView *scrollView     = [self enclosingScrollView];
     [scrollView setVerticalScroller:scroller];
     NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
-    for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(kPrefsToWatch[0]); ++i)
-    {
+    
+    self.prefsToWatch = @[kCoverStoryMissedLineColorKey, kCoverStoryUnexecutableLineColorKey,
+                          kCoverStoryNonFeasibleLineColorKey, kCoverStoryExecutedLineColorKey];
+    [self.prefsToWatch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [defaults addObserver:self
-                   forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]
+                   forKeyPath:[NSUserDefaultsController cs_valuesKey:obj]
                       options:NSKeyValueObservingOptionNew
                       context:nil];
-    }
+    }];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -66,21 +63,17 @@ static NSString *const kPrefsToWatch[] = {
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    BOOL handled = NO;
-    NSString *const kColorsToWatch[] = {
-        kCoverStoryMissedLineColorKey,
-        kCoverStoryUnexecutableLineColorKey,
-        kCoverStoryNonFeasibleLineColorKey,
-        kCoverStoryExecutedLineColorKey
-    };
-    for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(kPrefsToWatch[0]); ++i)
-    {
-        if ([keyPath isEqualToString:[NSUserDefaultsController cs_valuesKey:kColorsToWatch[i]]])
+    __block BOOL handled = NO;
+    
+    [self.prefsToWatch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([keyPath isEqualToString:[NSUserDefaultsController cs_valuesKey:obj]])
         {
             [self reloadData];
             handled = YES;
+            *stop = YES;
         }
-    }
+    }];
+
     if (!handled)
     {
         LOG(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
