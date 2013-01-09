@@ -40,10 +40,10 @@
     NSDictionary *attributes = nil;
     if (count != kCoverStoryNotExecutedMarker)
     {
+        NSColor *color = nil;
         NSMutableParagraphStyle *pStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         [pStyle setAlignment:NSRightTextAlignment];
         [pStyle setMinimumLineHeight:13];
-        NSColor *color = nil;
         
         if (count == 0)
         {
@@ -207,8 +207,7 @@ const float kGoodCoverage = 75.0f;
 
 - (id)transformedValue:(id)value
 {
-    NSAssert([value isKindOfClass:[CoverStoryCoverageFileData class]],
-             @"Only handle CoverStoryCoverageFileData");
+    NSAssert([value isKindOfClass:[CoverStoryCoverageFileData class]], @"Only handle CoverStoryCoverageFileData");
     CoverStoryCoverageFileData *data = (CoverStoryCoverageFileData *)value;
     float coverage = 0.0f;
     NSString *coverageString = nil;
@@ -218,11 +217,13 @@ const float kGoodCoverage = 75.0f;
             nonFeasibleLines:NULL
               coverageString:&coverageString
                     coverage:&coverage];
+
     float redHue     = 0;
     float greenHue   = 120.0f / 360.0f;
     float hue        = 0;
     float saturation = 1.0f;
     float brightness = 0.75f;
+
     if (coverage < kBadCoverage)
     {
         hue = redHue;
@@ -239,9 +240,8 @@ const float kGoodCoverage = 75.0f;
                                               saturation:saturation
                                               brightness:brightness
                                                    alpha:1.0];
-    NSDictionary *attributes = @{NSForegroundColorAttributeName : textColor};
     return [[NSAttributedString alloc] initWithString:coverageString
-                                           attributes:attributes];
+                                           attributes:@{NSForegroundColorAttributeName : textColor}];
 }
 
 @end
@@ -267,6 +267,7 @@ const float kGoodCoverage = 75.0f;
     NSInteger hitLines                      = 0;
     NSInteger nonfeasible                   = 0;
     NSString *coverage                      = nil;
+
     [data coverageTotalLines:&totalLines
                    codeLines:&codeLines
                 hitCodeLines:&hitLines

@@ -137,8 +137,7 @@ typedef NS_ENUM(NSInteger, CSMessageType)
                              forKeyPath:NSSelectionIndexesBinding
                                 options:0
                                 context:nil];
-    NSSortDescriptor *ascending = [[NSSortDescriptor alloc] initWithKey:@"coverage"
-                                                              ascending:YES];
+    NSSortDescriptor *ascending = [[NSSortDescriptor alloc] initWithKey:@"coverage" ascending:YES];
     [sourceFilesController_ setSortDescriptors:@[ascending]];
 }
 

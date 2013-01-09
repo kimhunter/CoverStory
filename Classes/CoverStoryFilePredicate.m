@@ -57,15 +57,14 @@ static NSString * const kFilter = @"filter";
 
 - (BOOL)evaluateWithObject:(id)object
 {
-    BOOL isGood              = YES;
-    NSString *path           = [object valueForKey:@"sourcePath"];
+    BOOL isGood = YES;
+    NSString *path = [object valueForKey:@"sourcePath"];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     BOOL hideSDKFiles = [document_ hideSDKSources];
     if (hideSDKFiles)
     {
-        NSArray *systemSourcesPatterns =
-        [defaults arrayForKey:kCoverStorySystemSourcesPatternsKey];
+        NSArray *systemSourcesPatterns = [defaults arrayForKey:kCoverStorySystemSourcesPatternsKey];
         if (systemSourcesPatterns)
         {
             isGood = ![path cs_isMatchForPatternArray:systemSourcesPatterns];
@@ -76,8 +75,7 @@ static NSString * const kFilter = @"filter";
         BOOL hideUnittestFiles = [document_ hideUnittestSources];
         if (hideUnittestFiles)
         {
-            NSArray *unittestSourcesPatterns =
-            [defaults arrayForKey:kCoverStoryUnittestSourcesPatternsKey];
+            NSArray *unittestSourcesPatterns = [defaults arrayForKey:kCoverStoryUnittestSourcesPatternsKey];
             if (unittestSourcesPatterns)
             {
                 isGood = ![path cs_isMatchForPatternArray:unittestSourcesPatterns];
@@ -93,8 +91,7 @@ static NSString * const kFilter = @"filter";
         }
         else
         {
-            CoverStoryFilterStringType type
-            = [defaults integerForKey:kCoverStoryFilterStringTypeKey];
+            CoverStoryFilterStringType type = [defaults integerForKey:kCoverStoryFilterStringTypeKey];
             switch (type) {
                 default:
                 case kCoverStoryFilterStringTypeWildcardPattern:
@@ -119,8 +116,7 @@ static NSString * const kFilter = @"filter";
     BOOL result = YES;
     
     // no point in catching errors since we do this as they type
-    GTMRegex *regex = [GTMRegex regexWithPattern:string
-                                         options:kGTMRegexOptionIgnoreCase];
+    GTMRegex *regex = [GTMRegex regexWithPattern:string options:kGTMRegexOptionIgnoreCase];
     if (regex)
     {
         result = [regex matchesSubStringInString:self];
@@ -142,8 +138,7 @@ static NSString * const kFilter = @"filter";
     for (NSDictionary *patternDict in patterns)
     {
         NSString *pattern = patternDict[kFilter];
-        if (([pattern length] > 0) &&
-            (fnmatch([pattern UTF8String], utf8Self, 0) == 0))
+        if (([pattern length] > 0) && (fnmatch([pattern UTF8String], utf8Self, 0) == 0))
         {
             return YES;
         }

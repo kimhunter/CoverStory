@@ -21,18 +21,12 @@
 
 @implementation CoverStoryCoverageFileData
 
-+ (id)newCoverageFileDataFromPath:(NSString *)path
-                         document:(CoverStoryDocument *)document
-                  messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
++ (id)newCoverageFileDataFromPath:(NSString *)path document:(CoverStoryDocument *)document messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
 {
-    return [[self alloc] initWithPath:path
-                             document:document
-                      messageReceiver:receiver];
+    return [[self alloc] initWithPath:path document:document messageReceiver:receiver];
 }
 
-- (id)initWithPath:(NSString *)path
-          document:(CoverStoryDocument *)document
-   messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
+- (id)initWithPath:(NSString *)path document:(CoverStoryDocument *)document messageReceiver:(id<CoverStoryCoverageProcessingProtocol>)receiver
 {
     if ((self = [super init]))
     {
@@ -52,10 +46,9 @@
         
         // Let NSString try to handle the encoding when opening
         NSStringEncoding encoding;
-        NSError *error;
-        NSString *string = [NSString stringWithContentsOfFile:path
-                                                 usedEncoding:&encoding
-                                                        error:&error];
+        NSError *error = nil;
+        NSString *string = [NSString stringWithContentsOfFile:path usedEncoding:&encoding error:&error];
+        
         if (!string)
         {
             // Sadly, NSString doesn't detect/handle NSMacOSRomanStringEncoding very
@@ -105,8 +98,7 @@
                 {
                     [scanner setScanLocation:[scanner scanLocation] + 1];
                     // scan in the code line
-                    goodScan = [scanner scanUpToCharactersFromSet:linefeeds
-                                                       intoString:&segment];
+                    goodScan = [scanner scanUpToCharactersFromSet:linefeeds  intoString:&segment];
                 }
                 if (!goodScan)
                 {
@@ -120,12 +112,10 @@
                 {
                     if (hitCount > 0)
                     {
-                        NSString *warning =
-                        [NSString stringWithFormat:@"Line %lu is in a Non Feasible block,"
-                         " but was executed.",
-                         (unsigned long)[_lines count] - 4];
+                        NSString *warning = [NSString stringWithFormat:@"Line %lu is in a Non Feasible block, but was executed.", (unsigned long)[_lines count] - 4];
                         [_warnings addObject:warning];
                     }
+                    
                     // if the line was gonna count, mark it as non feasible (we only mark
                     // the lines that would have counted so the total number of non
                     // feasible lines isn't too high (otherwise comment lines, blank
@@ -147,10 +137,7 @@
                     {
                         if (hitCount > 0)
                         {
-                            NSString *warning =
-                            [NSString stringWithFormat:@"Line %lu is marked as a Non"
-                             " Feasible line, but was executed.",
-                             (unsigned long)[_lines count] - 4];
+                            NSString *warning = [NSString stringWithFormat:@"Line %lu is marked as a Non Feasible line, but was executed.", (unsigned long)[_lines count] - 4];
                             [_warnings addObject:warning];
                         }
                         hitCount = kCoverStoryNonFeasibleMarker;
@@ -160,10 +147,7 @@
                     {
                         if (hitCount > 0)
                         {
-                            NSString *warning =
-                            [NSString stringWithFormat:@"Line %lu is in a Non Feasible"
-                             " block, but was executed.",
-                             (unsigned long)[_lines count] - 4];
+                            NSString *warning = [NSString stringWithFormat:@"Line %lu is in a Non Feasible block, but was executed.", (unsigned long)[_lines count] - 4];
                             [_warnings addObject:warning];
                         }
                         // if the line was gonna count, mark it as non feasible (we only mark
@@ -177,9 +161,7 @@
                         inNonFeasibleRange = YES;
                     }
                 }
-                [_lines addObject:[CoverStoryCoverageLineData newCoverageLineDataWithLine:segment
-                                                                                 hitCount:hitCount
-                                                                             coverageFile:self]];
+                [_lines addObject:[CoverStoryCoverageLineData newCoverageLineDataWithLine:segment hitCount:hitCount coverageFile:self]];
             }
             
             // The first five lines are not data we want to show to the user
@@ -312,8 +294,7 @@
     {
         if (receiver)
         {
-            [receiver coverageErrorForPath:_sourcePath
-                                   message:@"coverage is for different source path:%@",
+            [receiver coverageErrorForPath:_sourcePath message:@"coverage is for different source path:%@",
              [fileData sourcePath]];
         }
         return NO;
@@ -325,8 +306,7 @@
     {
         if (receiver)
         {
-            [receiver coverageErrorForPath:_sourcePath
-                                   message:@"coverage source (%@) has different line count '%lu' vs '%lu'",
+            [receiver coverageErrorForPath:_sourcePath message:@"coverage source (%@) has different line count '%lu' vs '%lu'",
              [fileData sourcePath],
              (unsigned long)[newLines count],
              (unsigned long)[_lines count]];
@@ -344,8 +324,7 @@
         {
             if (receiver)
             {
-                [receiver coverageErrorForPath:_sourcePath
-                                       message:@"coverage source (%@) line %lu doesn't match, '%@' vs '%@'",
+                [receiver coverageErrorForPath:_sourcePath message:@"coverage source (%@) line %lu doesn't match, '%@' vs '%@'",
                  [fileData sourcePath], (unsigned long)x, [lineNew line], [lineMe line]];
             }
             return NO;
@@ -370,11 +349,9 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:
-            @"%@: %lu total lines, %ld lines non-feasible, "
-            @"%ld lines of code, %ld lines hit",
-            _sourcePath, (unsigned long)[_lines count],
-            (long)_nonfeasible, (long)_codeLines, (long)_hitLines];
+    return [NSString stringWithFormat:@"%@: %lu total lines, %ld lines non-feasible, %ld lines of code, %ld lines hit",
+                                        _sourcePath, (unsigned long)[_lines count],
+                                        (long)_nonfeasible, (long)_codeLines, (long)_hitLines];
 }
 
 
@@ -382,6 +359,7 @@
 
 
 @implementation CoverStoryCoverageFileData (ScriptingMethods)
+
 - (NSScriptObjectSpecifier *)objectSpecifier
 {
     NSScriptObjectSpecifier *containerSpec = [[self document] objectSpecifier];

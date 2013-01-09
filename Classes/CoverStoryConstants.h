@@ -10,13 +10,14 @@
 #define CoverStory_CoverStoryConstants_h
 
 #ifdef DEBUG
-
 #define LOG(args...) NSLog(@"%@", [NSString stringWithFormat:args])
-
 #else
-
 #define LOG(args...)
 
 #endif
+
+
+
+
 
 #endif

@@ -21,6 +21,10 @@
 #import "CoverStoryCoverageLineData.h"
 #import <Carbon/Carbon.h>
 
+@interface CoverStoryScroller ()
+@property (nonatomic, strong) NSArray *coverageData;
+@end
+
 @implementation CoverStoryScroller
 
 - (void)drawRect:(NSRect)rect

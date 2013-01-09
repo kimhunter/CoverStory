@@ -48,9 +48,7 @@
     }
     else if (newHits > 0)
     {
-        NSAssert1(self.hitCount >= 0,
-                  @"how was it not feasible in only one version? (hitCount_ = %ld)",
-                  (long)_hitCount);
+        NSAssert1(self.hitCount >= 0, @"how was it not feasible in only one version? (hitCount_ = %ld)", (long)_hitCount);
         self.hitCount += newHits;
     }
 }

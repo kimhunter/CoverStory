@@ -28,7 +28,7 @@ GTMOBJECT_SINGLETON_BOILERPLATE(GCovVersionManager, defaultManager);
         // TODO: Should really use xcode-select -print-path as the starting point.
         [map addEntriesFromDictionary:[[self class] collectVersionsInFolder:@"/Developer/usr/bin"]];
         NSFileManager *fm = [NSFileManager defaultManager];
-        BOOL isDir        = NO;
+        BOOL isDir = NO;
         if ([fm fileExistsAtPath:@"/Applications/Xcode.app" isDirectory:&isDir] && isDir)
         {
             [map addEntriesFromDictionary:[[self class] collectVersionsInFolder:@"/Applications/Xcode.app/Contents/Developer/usr/bin"]];
@@ -119,16 +119,15 @@ GTMOBJECT_SINGLETON_BOILERPLATE(GCovVersionManager, defaultManager);
     // http://developer.apple.com/mac/library/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/Reference/Reference.html#//apple_ref/occ/clm/NSFileManager/defaultManager
     // This is run on a thread, so don't use -defaultManager so we get something
     // thread safe.
-    NSFileManager *fm                 = [[NSFileManager alloc] init];
+    NSFileManager *fm = [[NSFileManager alloc] init];
     NSDirectoryEnumerator *enumerator = [fm enumeratorAtPath:path];
     // ...filter to gcov* apps...
-    NSEnumerator *enumerator2 =
-    [enumerator gtm_filteredEnumeratorByMakingEachObjectPerformSelector:@selector(hasPrefix:)
-                                                             withObject:@"gcov"];
+    NSEnumerator *enumerator2 = [enumerator gtm_filteredEnumeratorByMakingEachObjectPerformSelector:@selector(hasPrefix:)
+                                                                                         withObject:@"gcov"];
     // ...turn them all into full paths...
-    NSEnumerator *enumerator3 =
-    [enumerator2 gtm_enumeratorByTarget:path
-                  performOnEachSelector:@selector(stringByAppendingPathComponent:)];
+    NSEnumerator *enumerator3 = [enumerator2 gtm_enumeratorByTarget:path
+                                              performOnEachSelector:@selector(stringByAppendingPathComponent:)];
+
     // ...walk over them validating they are good to use.
     for (NSString *gcovPath in enumerator3)
     {

@@ -44,13 +44,9 @@
     {
         // it's new, save it
         NSUInteger index = [_fileDatas count];
-        [self willChange:NSKeyValueChangeInsertion
-         valuesAtIndexes:[NSIndexSet indexSetWithIndex:index]
-                  forKey:@"fileDatas"];
+        [self willChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:index] forKey:@"fileDatas"];
         [_fileDatas insertObject:fileData atIndex:index];
-        [self didChange:NSKeyValueChangeInsertion
-        valuesAtIndexes:[NSIndexSet indexSetWithIndex:index]
-                 forKey:@"fileDatas"];
+        [self didChange:NSKeyValueChangeInsertion valuesAtIndexes:[NSIndexSet indexSetWithIndex:index] forKey:@"fileDatas"];
         
         // send the queued up warnings since this is the first time we've seen the
         // file.
@@ -64,8 +60,7 @@
         // file/line so the user can take action on the message.
         for (NSString *warning in [fileData queuedWarnings])
         {
-            [receiver coverageWarningForPath:[fileData sourcePath]
-                                     message:@"%@", warning];
+            [receiver coverageWarningForPath:[fileData sourcePath] message:@"%@", warning];
         }
         wasGood = YES;
     }
@@ -91,7 +86,7 @@
 
 - (void)removeAllData
 {
-    NSRange fullRange   = NSMakeRange(0, [_fileDatas count]);
+    NSRange fullRange = NSMakeRange(0, [_fileDatas count]);
     NSIndexSet *fullSet = [NSIndexSet indexSetWithIndexesInRange:fullRange];
     [self willChange:NSKeyValueChangeRemoval valuesAtIndexes:fullSet forKey:@"fileDatas"];
     [_fileDatas removeAllObjects];
@@ -101,8 +96,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@ <%p>: %lu items in set",
-            [self class], self, (unsigned long)[_fileDatas count]];
+    return [NSString stringWithFormat:@"%@ <%p>: %lu items in set", [self class], self, (unsigned long)[_fileDatas count]];
 }
 
 @end

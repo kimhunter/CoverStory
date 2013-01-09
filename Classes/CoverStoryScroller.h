@@ -21,10 +21,7 @@
 
 // Draws the special CoverStory scroller that has the hilights in it to show
 // places that don't have coverage
-@interface CoverStoryScroller : NSScroller {
-@private
-    NSArray *_coverageData;
-}
+@interface CoverStoryScroller : NSScroller
 
 // set the data for the scroller to work from
 - (void)setCoverageData:(NSArray *)coverageData;
