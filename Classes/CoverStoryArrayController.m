@@ -22,57 +22,47 @@
 #import "CoverStoryPreferenceKeys.h"
 #import "NSUserDefaultsController+KeyValues.h"
 
-static NSString *const kPrefsToWatch[] = {
-    kCoverStorySystemSourcesPatternsKey,
-    kCoverStoryUnittestSourcesPatternsKey,
-};
-
 #define kCoverStoryHideSDKSources @"hideSDKSources"
 #define kCoverStoryHideUnittestSources @"hideUnittestSources"
 #define kCoverStoryRemoveCommonSourcePrefix @"removeCommonSourcePrefix"
 #define kCoverStoryFilterString @"filterString"
 
-static NSString *const kDocumentKeyPathsToWatch[] = {
-    kCoverStoryHideSDKSources,
-    kCoverStoryHideUnittestSources,
-    kCoverStoryRemoveCommonSourcePrefix,
-    kCoverStoryFilterString
-};
+@interface CoverStoryArrayController ()
+@property (nonatomic, retain) NSArray *prefsToWatch;
+@property (nonatomic, retain) NSArray *docKeyPathsToWatch;
+@end
 
 @implementation CoverStoryArrayController
 
 - (void)dealloc
 {
-    for (size_t i = 0; i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]); ++i)
-    {
-        [_owningDocument removeObserver:self forKeyPath:kDocumentKeyPathsToWatch[i]];
-    }
+    [_docKeyPathsToWatch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [_owningDocument removeObserver:self forKeyPath:obj];
+    }];
+
     NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
-    for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(NSString *); ++i)
-    {
-        [defaults removeObserver:self forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]];
-    }
-    
+    [self.prefsToWatch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [defaults removeObserver:self forKeyPath:[NSUserDefaultsController cs_valuesKey:obj]];
+    }];
 }
 
 
 - (void)awakeFromNib
 {
-    for (size_t i = 0; i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]); ++i)
-    {
-        [_owningDocument addObserver:self
-                          forKeyPath:kDocumentKeyPathsToWatch[i]
-                             options:0
-                             context:nil];
-    }
+    self.prefsToWatch = @[kCoverStorySystemSourcesPatternsKey, kCoverStoryUnittestSourcesPatternsKey];
+    self.docKeyPathsToWatch = @[kCoverStoryHideSDKSources,
+                                kCoverStoryHideUnittestSources,
+                                kCoverStoryRemoveCommonSourcePrefix,
+                                kCoverStoryFilterString];
+    [_docKeyPathsToWatch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [_owningDocument addObserver:self forKeyPath:obj options:0 context:nil];
+    }];
+    
     NSUserDefaultsController *defaults = [NSUserDefaultsController sharedUserDefaultsController];
-    for (size_t i = 0; i < sizeof(kPrefsToWatch) / sizeof(NSString *); ++i)
-    {
-        [defaults addObserver:self
-                   forKeyPath:[NSUserDefaultsController cs_valuesKey:kPrefsToWatch[i]]
-                      options:0
-                      context:nil];
-    }
+    [self.prefsToWatch enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [defaults addObserver:self forKeyPath:[NSUserDefaultsController cs_valuesKey:obj] options:0 context:nil];
+
+    }];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -104,16 +94,14 @@ static NSString *const kDocumentKeyPathsToWatch[] = {
     }
     else if ([object isEqualTo:_owningDocument])
     {
-        for (size_t i = 0; i < sizeof(kDocumentKeyPathsToWatch) / sizeof(kDocumentKeyPathsToWatch[0]); ++i)
+        NSInteger keyIndex = [self.docKeyPathsToWatch indexOfObject:keyPath];
+        if (keyIndex != NSNotFound)
         {
-            if ([keyPath isEqualToString:kDocumentKeyPathsToWatch[i]])
-            {
-                // user has changed a setting that requires a rearrange
-                [self rearrangeObjects];
-                handled = YES;
-            }
+            [self rearrangeObjects];
+            handled = YES;
         }
     }
+    
     if (!handled)
     {
         LOG(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
