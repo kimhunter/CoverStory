@@ -30,6 +30,9 @@ static NSString *const kPrefsToWatch[] = {
     kCoverStoryExecutedLineColorKey
 };
 
+@interface CoverStoryCodeViewTableView ()
+
+@end
 @implementation CoverStoryCodeViewTableView
 
 - (void)dealloc
@@ -80,7 +83,7 @@ static NSString *const kPrefsToWatch[] = {
     }
     if (!handled)
     {
-        _GTMDevLog(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
+        LOG(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
     }
 }
 

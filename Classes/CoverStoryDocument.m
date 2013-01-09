@@ -659,7 +659,7 @@ typedef NS_ENUM(NSInteger, CSMessageType)
     }
     if (!handled)
     {
-        _GTMDevLog(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
+        LOG(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
     }
 }
 

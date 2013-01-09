@@ -116,7 +116,7 @@ static NSString *const kDocumentKeyPathsToWatch[] = {
     }
     if (!handled)
     {
-        _GTMDevLog(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
+        LOG(@"Unexpected observance of %@ of %@ (%@)", keyPath, object, change);
     }
 }
 
