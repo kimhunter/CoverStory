@@ -18,7 +18,6 @@
 //
 
 #import "CoverStoryDocument.h"
-#import "CoverStoryCoverageData.h"
 #import "CoverStoryDocumentTypes.h"
 #import "CoverStoryPreferenceKeys.h"
 #import "CoverStoryCodeViewTableView.h"

@@ -8,8 +8,7 @@
 
 #import "CoverStoryCoverageSet.h"
 #import "CoverStoryCoverageFileData.h"
-#import "CoverStoryCoverageData.h"
-
+#import "CodeCoverage.h"
 
 @interface CoverStoryCoverageSet () {
     NSMutableArray *_fileDatas;

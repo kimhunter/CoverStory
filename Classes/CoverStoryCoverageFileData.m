@@ -8,6 +8,7 @@
 
 #import "CoverStoryCoverageFileData.h"
 #import "CoverStoryCoverageLineData.h"
+#import "CodeCoverage.h"
 #import "GTMRegex.h"
 
 @interface CoverStoryCoverageFileData ()

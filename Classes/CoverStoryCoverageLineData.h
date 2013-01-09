@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CoverStoryCoverageFileData.h"
+#import "CodeCoverage.h"
 
 // Keeps track of the number of times a line of code has been hit. There is
 // one CoverStoryCoverageLineData object per line of code in the file.

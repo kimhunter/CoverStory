@@ -17,9 +17,10 @@
 //  the License.
 //
 
-#import "CoverStoryCoverageData.h"
 #import "CoverStoryDocument.h"
 #import "GTMRegex.h"
+#import "CoverStoryProtocols.h"
+
 
 // helper for building the string to make sure rounding doesn't get us
 float codeCoverage (NSInteger codeLines, NSInteger hitCodeLines, NSString * *outCoverageString)

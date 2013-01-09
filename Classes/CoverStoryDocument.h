@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "GTMDefines.h"
-#import "CoverStoryCoverageData.h"
+#import "CoverStoryProtocols.h"
 
 @class CoverStoryArrayController;
 @class CoverStoryCodeViewTableView;
